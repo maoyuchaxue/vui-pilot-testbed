@@ -1,0 +1,8 @@
+.gradle
+libs
+gradle
+conf
+build
+bin
+.settings
+logs
