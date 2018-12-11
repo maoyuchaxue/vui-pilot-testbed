@@ -24,7 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
-mainClassName = 'com.baidu.aip.demotest.MainTest'
+mainClassName = 'com.baidu.aip.demotest.MainTestor'
 applicationDefaultJvmArgs = ["-Djava.library.path=libs"]
 task copyJars(type: Copy) {
     from configurations.runtime

@@ -33,8 +33,13 @@ public class AudioCapturer {
     public byte[] read() {
         int len = packageDurationInMs * sampleSizeInBits;
         byte[] bytes = new byte[len];
-        line.read(bytes, 0, len);
-        return bytes;
+        int bytesRead = line.read(bytes, 0, len);
+
+        if (bytesRead == 0) {
+            return null;
+        } else {
+            return bytes;
+        }
     }
 
     public void stop() {
