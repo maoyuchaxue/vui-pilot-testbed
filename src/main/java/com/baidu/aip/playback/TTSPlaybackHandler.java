@@ -37,8 +37,13 @@ public class TTSPlaybackHandler implements PlaybackHandler {
             e.printStackTrace();
         }
 
+        System.out.println(text);
         if (bytes != null) {
+            System.out.println(bytes.length);
+            line.start();
             line.write(bytes, 0, bytes.length);
+            line.drain();
+            line.stop();
         }
     }
 }

@@ -24,9 +24,14 @@ public class LocalNetInputHandler implements InputHandler {
     }
 
     public void onInputReceived(String input) {
+
+        String params = "text=" + ConnUtil.urlEncode(ConnUtil.urlEncode(input))
+            + "&cuid=" + cuid;
+        String paramedURL = localNetURL + "?" + params;
+
         HttpURLConnection conn = null;
         try {
-            conn = (HttpURLConnection) new URL(localNetURL).openConnection();
+            conn = (HttpURLConnection) new URL(paramedURL).openConnection();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cannot access net server");
@@ -36,19 +41,6 @@ public class LocalNetInputHandler implements InputHandler {
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.setConnectTimeout(2000);
-
-        PrintWriter printWriter = null;
-        try {
-            printWriter = new PrintWriter(conn.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Cannot write into http request");
-        }
-
-        String params = "text=" + ConnUtil.urlEncode(ConnUtil.urlEncode(input))
-            + "&cuid=" + cuid;
-        printWriter.write(params);
-        printWriter.close();
 
         try {
             byte[] response = ConnUtil.getResponseBytes(conn);
