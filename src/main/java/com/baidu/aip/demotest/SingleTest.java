@@ -30,7 +30,6 @@ public class SingleTest {
 
         Session session = performer.asr(controller);
 
-        // 判断服务端是否接受到结束事件，超时5s
         while (true) {
             if (resultListener.isCallEnd(session.getCallId())) {
                 System.out.println("Server receive call END EVENT");

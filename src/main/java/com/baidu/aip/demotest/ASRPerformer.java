@@ -15,11 +15,11 @@ public class ASRPerformer {
     public Session asr(ISessionController controller) {
         Session.Config config = Session.createConfig(Session.Config.RoleId.AGENT, false);
         
-        config.setAgentDn(123); // 坐席号, 用户自行定义
+        config.setAgentDn(123);
         Session session = null;
         try {
             session = controller.startSession(config);
-            registerShutdown(controller, session); // ctrl C 退出时发送end 包
+            registerShutdown(controller, session); // ctrl+C exits
             startCapture(session);
             session.sendEndSpeech();
             session.destroy();

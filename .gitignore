@@ -3,7 +3,7 @@ libs
 gradle
 conf
 build
-bin
+bin/*
 .settings
 logs
 settings.json

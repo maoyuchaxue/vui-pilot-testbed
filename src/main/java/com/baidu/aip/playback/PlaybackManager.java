@@ -9,7 +9,7 @@ public class PlaybackManager {
    
     public PlaybackManager(Properties properties, String cuid) {
         String appKey = properties.getProperty("app.appKey");
-        String secretKey = properties.getProperty("app.secretKey");
+        String secretKey = properties.getProperty("app.appSecret");
         handler = new TTSPlaybackHandler(appKey, secretKey);
         messageQueue = new PlaybackMessageQueue();
         handlerThread = new Thread(new PlaybackThread(handler, messageQueue, cuid));

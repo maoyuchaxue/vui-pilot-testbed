@@ -35,14 +35,14 @@ public class ASRResultListener implements IAfterDownloadListener {
                 String callId = node.get("callId").asText();
                 if (status == 0) {
                     endCallIds.put(callId, System.currentTimeMillis());
-                    System.out.println("call ended, callId：" + callId);
+                    System.out.println("call ended, callId: " + callId);
                 }
             } else if (node.has("content")) {
                 JsonNode contentNode = node.get("content");
                 if (contentNode.has("category")) {
                     String category = contentNode.get("category").asText();
                     if (category.equals("TXT")) {
-                        result = parseTxt(contentNode); // 识别结果
+                        result = parseTxt(contentNode);
                     }
                 }
             }
