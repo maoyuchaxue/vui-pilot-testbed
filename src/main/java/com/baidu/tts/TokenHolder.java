@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.baidu.util.ConnUtil;
+import com.baidu.util.NetException;
+
 public class TokenHolder {
 
 
@@ -39,7 +42,7 @@ public class TokenHolder {
         return expiresAt;
     }
     
-    public void refresh() throws IOException, TTSException {
+    public void refresh() throws IOException, NetException, TTSException {
         String getTokenURL = URL + "?grant_type=client_credentials"
                 + "&client_id=" + ConnUtil.urlEncode(apiKey) + "&client_secret=" + ConnUtil.urlEncode(secretKey);
 
@@ -53,7 +56,7 @@ public class TokenHolder {
         parseJson(result);
     }
 
-    private void parseJson(String result) throws TTSException {
+    private void parseJson(String result) throws NetException, TTSException {
         JSONObject json = new JSONObject(result);
         if (!json.has("access_token")) {
             throw new TTSException("access_token not obtained, " + result);

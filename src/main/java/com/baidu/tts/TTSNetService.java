@@ -9,6 +9,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.baidu.util.ConnUtil;
+import com.baidu.util.NetException;
+
 public class TTSNetService {
     
     private String appKey;
@@ -26,11 +29,11 @@ public class TTSNetService {
         this.secretKey = secretKey;
     }
 
-    public byte[] tts(String text) throws IOException, TTSException {
+    public byte[] tts(String text) throws IOException, NetException, TTSException {
         return tts(text, "default");
     }
 
-    public byte[] tts(String text, String cuid) throws IOException, TTSException  {
+    public byte[] tts(String text, String cuid) throws IOException, NetException, TTSException {
         TokenHolder holder = new TokenHolder(appKey, secretKey, TokenHolder.TTS_SCOPE);
         holder.refresh();
         String token = holder.getToken();

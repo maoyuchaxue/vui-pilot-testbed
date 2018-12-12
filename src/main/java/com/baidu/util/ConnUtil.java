@@ -1,4 +1,4 @@
-package com.baidu.tts;
+package com.baidu.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,18 +19,18 @@ public class ConnUtil {
         return result;
     }
 
-    public static String getResponseString(HttpURLConnection conn) throws IOException, TTSException {
+    public static String getResponseString(HttpURLConnection conn) throws IOException, NetException {
         return new String(getResponseBytes(conn));
     }
 
-    public static byte[] getResponseBytes(HttpURLConnection conn) throws IOException, TTSException {
+    public static byte[] getResponseBytes(HttpURLConnection conn) throws IOException, NetException {
         int responseCode = conn.getResponseCode();
         if (responseCode != 200) {
             System.err.println("http return code error:" + responseCode);
             if (responseCode == 401) {
                 System.err.println("appkey appSecret might be wrong");
             }
-            throw new TTSException("http response code is" + responseCode);
+            throw new NetException("http response code is" + responseCode);
         }
 
         InputStream inputStream = conn.getInputStream();
@@ -39,7 +39,7 @@ public class ConnUtil {
     }
 
     public static byte[] getInputStreamContent(InputStream is) throws IOException {
-        byte[] b = new byte[1024];
+        byte[] b = new byte[4096];
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int len = 0;
         while (true) {
