@@ -19,18 +19,18 @@ public class ConnUtil {
         return result;
     }
 
-    public static String getResponseString(HttpURLConnection conn) throws IOException, DemoException {
+    public static String getResponseString(HttpURLConnection conn) throws IOException, TTSException {
         return new String(getResponseBytes(conn));
     }
 
-    public static byte[] getResponseBytes(HttpURLConnection conn) throws IOException, DemoException {
+    public static byte[] getResponseBytes(HttpURLConnection conn) throws IOException, TTSException {
         int responseCode = conn.getResponseCode();
         if (responseCode != 200) {
             System.err.println("http return code error:" + responseCode);
             if (responseCode == 401) {
                 System.err.println("appkey appSecret might be wrong");
             }
-            throw new DemoException("http response code is" + responseCode);
+            throw new TTSException("http response code is" + responseCode);
         }
 
         InputStream inputStream = conn.getInputStream();

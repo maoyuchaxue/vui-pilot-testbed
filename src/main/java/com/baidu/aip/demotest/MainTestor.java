@@ -12,9 +12,12 @@ public class MainTestor {
 
     public static void main(String[] args) throws Exception {
         InputHandler inputHandler = new LocalNetInputHandler();
+        Properties properties = getProperties();
+
         ASRResultListener resultListener = new ASRResultListener(inputHandler);
 
-        Controller controller = new Controller(new LogBeforeUploadListener(), resultListener);
+        Controller controller = new Controller(new LogBeforeUploadListener(), resultListener, properties);
+        
         ASRPerformer performer = new ASRPerformer();
 
         Session session = performer.asr(controller);

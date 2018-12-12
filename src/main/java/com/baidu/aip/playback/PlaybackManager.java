@@ -1,14 +1,18 @@
 package com.baidu.aip.playback;
 
+import java.util.Properties;
+
 public class PlaybackManager {
     private PlaybackMessageQueue messageQueue;
     private Thread handlerThread;
     private PlaybackHandler handler;
-    
-    public PlaybackManager() {
-        handler = new TTSPlaybackHandler();
+   
+    public PlaybackManager(Properties properties, String cuid) {
+        String appKey = properties.getProperty("app.appKey");
+        String secretKey = properties.getProperty("app.secretKey");
+        handler = new TTSPlaybackHandler(appKey, secretKey);
         messageQueue = new PlaybackMessageQueue();
-        handlerThread = new Thread(new PlaybackThread(handler, messageQueue));
+        handlerThread = new Thread(new PlaybackThread(handler, messageQueue, cuid));
     }
 
     public void start() {

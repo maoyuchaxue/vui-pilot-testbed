@@ -39,7 +39,7 @@ public class TokenHolder {
         return expiresAt;
     }
     
-    public void refresh() throws IOException, DemoException {
+    public void refresh() throws IOException, TTSException {
         String getTokenURL = URL + "?grant_type=client_credentials"
                 + "&client_id=" + ConnUtil.urlEncode(apiKey) + "&client_secret=" + ConnUtil.urlEncode(secretKey);
 
@@ -53,16 +53,16 @@ public class TokenHolder {
         parseJson(result);
     }
 
-    private void parseJson(String result) throws DemoException {
+    private void parseJson(String result) throws TTSException {
         JSONObject json = new JSONObject(result);
         if (!json.has("access_token")) {
-            throw new DemoException("access_token not obtained, " + result);
+            throw new TTSException("access_token not obtained, " + result);
         }
         if (!json.has("scope")) {
-            throw new DemoException("scope not obtained, " + result);
+            throw new TTSException("scope not obtained, " + result);
         }
         if (!json.getString("scope").contains(scope)) {
-            throw new DemoException("scope not exist, " + scope + "," + result);
+            throw new TTSException("scope not exist, " + scope + "," + result);
         }
         token = json.getString("access_token");
         expiresAt = System.currentTimeMillis() + json.getLong("expires_in") * 1000;

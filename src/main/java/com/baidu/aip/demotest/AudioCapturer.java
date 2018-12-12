@@ -5,7 +5,7 @@ import javax.sound.sampled.*;
 public class AudioCapturer {
 
     final public static int packageDurationInMs = 40;
-    final public static int sampleRate = 8096;
+    final public static int sampleRate = 8000;
     final public static int sampleSizeInBits = 16;
 
     private TargetDataLine line;
