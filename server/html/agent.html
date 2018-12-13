@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>WOZ control panel</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+        <script src="/javascripts/socket.io.js"></script>
+        <script src="/javascripts/agent.js"></script>
+        <link rel="stylesheet" href="/stylesheets/agent.css"/>
+    </head>
+    <body>
+        <div id="root">
+            <ul id="msg_box">
+                <li v-for="msg in msgs">
+                    {{msg.is_user ? "user" : "agent"}} : {{msg.text}}
+                </li>
+            </ul>
+            <ul id="choose_box">
+                <button v-for="option in options" :key="option.id" v-on:click="sendAgentMsg(option.text)">
+                    {{option.text}}
+                </button>
+            </ul>
+        </div>
+        <script>
+            agent();
+        </script>
+    </body>
+</html>

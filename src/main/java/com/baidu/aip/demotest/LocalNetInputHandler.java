@@ -25,8 +25,11 @@ public class LocalNetInputHandler implements InputHandler {
 
     public void onInputReceived(String input) {
 
-        String params = "text=" + ConnUtil.urlEncode(ConnUtil.urlEncode(input))
-            + "&cuid=" + cuid;
+        String params = "cuid=" + cuid;
+        if (input != null) {
+            params += "text=" + ConnUtil.urlEncode(ConnUtil.urlEncode(input));
+        }
+
         String paramedURL = localNetURL + "?" + params;
 
         HttpURLConnection conn = null;
@@ -44,7 +47,9 @@ public class LocalNetInputHandler implements InputHandler {
 
         try {
             byte[] response = ConnUtil.getResponseBytes(conn);
-            playbackManager.addMessage(new String(response));
+            if (response.length > 0) {
+                playbackManager.addMessage(new String(response));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
