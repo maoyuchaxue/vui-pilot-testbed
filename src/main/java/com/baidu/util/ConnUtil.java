@@ -12,7 +12,17 @@ public class ConnUtil {
     public static String urlEncode(String str) {
         String result = null;
         try {
-            result = URLEncoder.encode(str, "UTF-8");
+            result = URLEncoder.encode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String urlEncodeGBK(String str) {
+        String result = null;
+        try {
+            result = URLEncoder.encode(str, "gbk");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

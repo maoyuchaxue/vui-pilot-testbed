@@ -28,6 +28,7 @@ public class ASRResultListener implements IAfterDownloadListener {
     @Override
     public void onReceive(String json) {
         String result = null;
+        boolean completed = true;
         try {
             JsonNode node = objectReader.readTree(json);
             if (node.has("name") && INameConstant.SPEECH_END_ACK.equals(node.get("name").asText())) {
@@ -43,6 +44,17 @@ public class ASRResultListener implements IAfterDownloadListener {
                     String category = contentNode.get("category").asText();
                     if (category.equals("TXT")) {
                         result = parseTxt(contentNode);
+                        
+                        if (contentNode.has("extJson")) {
+                            JsonNode nodeExt = contentNode.get("extJson");
+                            if (nodeExt.has("completed")) {
+                                if (nodeExt.get("completed").asInt() == 1) {
+                                    completed = false;
+                                } else if (nodeExt.get("completed").asInt() == 3) {
+                                    completed = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -51,7 +63,7 @@ public class ASRResultListener implements IAfterDownloadListener {
         }
 
         if (result != null) {
-            inputHandler.onInputReceived(result);
+            inputHandler.onInputReceived(result, completed);
         }
     }
 

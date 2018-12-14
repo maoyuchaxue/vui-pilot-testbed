@@ -4,20 +4,22 @@ var fs = require('fs');
 
 var script_json = fs.readFileSync('script/test.json');
 var script = JSON.parse(script_json);
+var module_socket = null;
 
 module.exports = {
     socket: function(socket) {
-        this.socket = socket;
+        module_socket = socket;
         socket.on('agent_msg', function(text) {
+            console.log("agent_msg: " + text);
             message_queue.agent_to_user.push(text);
-            socket.emit('user_msg', text);
+            // socket.emit('user_msg', text);
         });
         socket.emit('options', script);
     },
     send: function(text) {
-        this.socket.emit('user_msg', text);
+        module_socket.emit('user_msg', text);
     },
     set_options: function(options) {
-        this.socket.emit('options', options);
+        module_socket.emit('options', options);
     }
 }
