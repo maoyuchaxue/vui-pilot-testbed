@@ -1,5 +1,7 @@
 package com.baidu.aip.demotest;
 
+import com.baidu.aip.playback.LocalNetPlaybackFetcher;
+import com.baidu.aip.playback.PlaybackFetcher;
 import com.baidu.aip.playback.PlaybackManager;
 import com.baidu.aip.talker.controller.Session;
 import com.baidu.aip.talker.facade.Controller;
@@ -20,13 +22,15 @@ public class SingleTest {
 
     public void execute() throws Exception {
         PlaybackManager playbackManager = new PlaybackManager(properties, cuid);
+        PlaybackFetcher playbackFetcher = new LocalNetPlaybackFetcher(playbackManager, cuid);
+
         InputHandler inputHandler = new LocalNetInputHandler(playbackManager, cuid);
         playbackManager.start();
 
         ASRResultListener resultListener = new ASRResultListener(inputHandler);
         Controller controller = new Controller(new LogBeforeUploadListener(), resultListener, properties);
 
-        ASRPerformer performer = new ASRPerformer();
+        ASRPerformer performer = new ASRPerformer(playbackFetcher);
 
         Session session = performer.asr(controller);
 

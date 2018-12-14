@@ -50,9 +50,9 @@ public class ASRResultListener implements IAfterDownloadListener {
             e.printStackTrace();
         }
 
-        inputHandler.onInputReceived(result);
-        // whether a speech is detected or not, handler is always triggered 
-        // so that agent feedbacks can be fetched instantly.
+        if (result != null) {
+            inputHandler.onInputReceived(result);
+        }
     }
 
     public boolean isCallEnd(String callId) {

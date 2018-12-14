@@ -1,4 +1,4 @@
-package com.baidu.aip.demotest;
+package com.baidu.aip.playback;
 
 import com.baidu.aip.playback.PlaybackManager;
 import com.baidu.util.ConnUtil;
@@ -12,24 +12,20 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.net.URL;
 
-public class LocalNetInputHandler implements InputHandler {
+public class LocalNetPlaybackFetcher implements PlaybackFetcher {
 
     private PlaybackManager playbackManager;
-    private String localNetURL = "http://localhost:7575/user";
+    private String localNetURL = "http://localhost:7575/user_fetch";
     private String cuid;
 
-    public LocalNetInputHandler(PlaybackManager playbackManager, String cuid) {
+    public LocalNetPlaybackFetcher(PlaybackManager playbackManager, String cuid) {
         this.playbackManager = playbackManager;
         this.cuid = cuid;
     }
 
-    public void onInputReceived(String input) {
+    public void fetch() {
 
         String params = "cuid=" + cuid;
-        if (input != null) {
-            params += "text=" + ConnUtil.urlEncode(ConnUtil.urlEncode(input));
-        }
-
         String paramedURL = localNetURL + "?" + params;
 
         HttpURLConnection conn = null;
@@ -41,8 +37,17 @@ public class LocalNetInputHandler implements InputHandler {
             return ;
         }
 
-        conn.setDoInput(false);
-        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
         conn.setConnectTimeout(2000);
+
+        try {
+            byte[] response = ConnUtil.getResponseBytes(conn);
+            if (response.length > 0) {
+                playbackManager.addMessage(new String(response));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

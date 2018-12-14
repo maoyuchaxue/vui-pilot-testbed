@@ -19,6 +19,18 @@ router.get('/user', function(req, res, next) {
   }
 });
 
+
+router.get('/user_fetch', function(req, res, next) {
+  console.log(req.query.cuid);
+
+  var agent_res = message_queue.agent_to_user.shift();
+  if (agent_res) {
+    res.send(agent_res);
+  } else {
+    res.send("");
+  }
+});
+
 router.get('/agent', function(req, res, next) {
   res.sendFile(path.join(__dirname, "../html/agent.html"));
 });

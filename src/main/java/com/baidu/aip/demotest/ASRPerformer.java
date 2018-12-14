@@ -4,11 +4,15 @@ import com.baidu.aip.talker.controller.Session;
 import com.baidu.aip.talker.facade.ISessionController;
 import com.baidu.aip.talker.facade.exception.SendException;
 
+import com.baidu.aip.playback.PlaybackFetcher;
+
 public class ASRPerformer {
 
     AudioCapturer capturer;
+    PlaybackFetcher playbackFetcher;
 
-    public ASRPerformer() {
+    public ASRPerformer(PlaybackFetcher playbackFetcher) {
+        this.playbackFetcher = playbackFetcher;
         capturer = new AudioCapturer();
     }
     
@@ -47,6 +51,7 @@ public class ASRPerformer {
                     break;
                 }
                 session.sendFirstRoleSpeech(bytes);
+                playbackFetcher.fetch(); // fetch response
             };
         } finally {
             capturer.stop();

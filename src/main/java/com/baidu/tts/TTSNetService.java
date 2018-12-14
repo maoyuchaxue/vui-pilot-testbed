@@ -38,6 +38,9 @@ public class TTSNetService {
         holder.refresh();
         String token = holder.getToken();
 
+        text = new String(text.getBytes("gbk"),"utf-8");
+        System.out.println(text);
+        
         String params = "tex=" + ConnUtil.urlEncode(ConnUtil.urlEncode(text));
         params += "&per=" + per;
         params += "&spd=" + spd;
