@@ -39,8 +39,8 @@ public class TTSNetService {
         String token = holder.getToken();
 
         text = new String(text.getBytes("gbk"),"utf-8");
-        System.out.println(text);
-        
+        System.out.println("tts: " + text);
+
         String params = "tex=" + ConnUtil.urlEncode(ConnUtil.urlEncode(text));
         params += "&per=" + per;
         params += "&spd=" + spd;
@@ -61,7 +61,10 @@ public class TTSNetService {
         printWriter.close();
         String contentType = conn.getContentType();
         if (contentType.contains("audio/")) {
-            return ConnUtil.getResponseBytes(conn);
+            byte[] bytes = ConnUtil.getResponseBytes(conn);        
+            System.out.println(bytes.length);
+            System.out.println("tts end.");
+            return bytes;
         } else {
             System.err.println("ERROR: content-type= " + contentType);
             String res = ConnUtil.getResponseString(conn);

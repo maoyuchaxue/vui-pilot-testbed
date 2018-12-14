@@ -19,6 +19,7 @@ public class PlaybackThread implements Runnable {
         while (!messageQueue.stopped()) {
             String text = messageQueue.getMessage();
             if (text != null) {
+                System.out.println("now playing: " + text);
                 playbackHandler.play(text, cuid);
             }
         }
