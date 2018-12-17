@@ -1,12 +1,14 @@
 package edu.tsinghua.vui.vuitestbed;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 import edu.tsinghua.vui.vuitestbed.testctrl.SingleTest;
@@ -57,12 +59,12 @@ public class SingleTestActivity extends AppCompatActivity {
         thread.run();
     }
 
-    private static Properties getProperties() throws Exception {
-        String fullFilename = System.getProperty("user.dir") + "../conf/sdk.properties";
+    private Properties getProperties() throws Exception {
         Properties properties = new Properties();
-        FileInputStream is = null;
+        Resources resources = getResources();
+        InputStream is = null;
         try {
-            is = new FileInputStream(fullFilename);
+            is = resources.openRawResource(R.raw.sdk);
             properties.load(is);
         } finally {
             if (is != null) {

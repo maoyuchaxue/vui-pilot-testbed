@@ -14,9 +14,9 @@ public class AudioCapturer {
     private AudioRecord audioRecord;
 
     public AudioCapturer() {
-        int bufsize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+        int bufsize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate,
-                AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT, packageDurationInMs * sampleSizeInBits * 5);
+                AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, packageDurationInMs * sampleSizeInBits * 5);
     }
 
     public void start() {
