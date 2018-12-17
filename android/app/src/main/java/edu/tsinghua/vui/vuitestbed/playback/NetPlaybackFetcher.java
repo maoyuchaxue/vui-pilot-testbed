@@ -1,6 +1,7 @@
 package edu.tsinghua.vui.vuitestbed.playback;
 
 import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,15 +12,16 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.net.URL;
 
-public class LocalNetPlaybackFetcher implements PlaybackFetcher {
+public class NetPlaybackFetcher implements PlaybackFetcher {
 
     private PlaybackManager playbackManager;
-    private String localNetURL = "http://localhost:7575/user_fetch";
+    private String localNetURL;
     private String cuid;
 
-    public LocalNetPlaybackFetcher(PlaybackManager playbackManager, String cuid) {
+    public NetPlaybackFetcher(PlaybackManager playbackManager, String cuid) {
         this.playbackManager = playbackManager;
         this.cuid = cuid;
+        this.localNetURL = NetConfig.getNetUrl() +  "/user_fetch";
     }
 
     public void fetch() {

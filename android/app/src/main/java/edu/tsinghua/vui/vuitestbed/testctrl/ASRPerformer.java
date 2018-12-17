@@ -10,6 +10,7 @@ public class ASRPerformer {
 
     AudioCapturer capturer;
     PlaybackFetcher playbackFetcher;
+    boolean stopped;
 
     public ASRPerformer(PlaybackFetcher playbackFetcher) {
         this.playbackFetcher = playbackFetcher;
@@ -18,12 +19,14 @@ public class ASRPerformer {
     
     public Session asr(ISessionController controller) {
         Session.Config config = Session.createConfig(Session.Config.RoleId.AGENT, false);
+        stopped = false;
         
         config.setAgentDn(123);
         Session session = null;
         try {
             session = controller.startSession(config);
             registerShutdown(controller, session); // ctrl+C exits
+
             startCapture(session);
             session.sendEndSpeech();
             session.destroy();
@@ -39,7 +42,7 @@ public class ASRPerformer {
     private void startCapture(Session session) throws Exception {
         capturer.start();
         try {
-            while (true) {
+            while (!stopped) {
                 try {
                     Thread.sleep(AudioCapturer.packageDurationInMs);
                 } catch (InterruptedException e) {
@@ -73,5 +76,9 @@ public class ASRPerformer {
                 }
             }
         }));
+    }
+
+    public synchronized void stop() {
+        stopped = true;
     }
 }

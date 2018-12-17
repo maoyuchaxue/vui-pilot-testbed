@@ -14,7 +14,7 @@ public class MainTestor {
     public static void main(String[] args) throws Exception {
         Properties properties = getProperties();
         SingleTest test = new SingleTest(properties, "default");
-        test.execute();
+        test.run();
     }
     
     private static Properties getProperties() throws Exception {

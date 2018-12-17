@@ -2,6 +2,7 @@ package edu.tsinghua.vui.vuitestbed.testctrl;
 
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
 import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,15 +13,16 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.net.URL;
 
-public class LocalNetInputHandler implements InputHandler {
+public class NetInputHandler implements InputHandler {
 
     private PlaybackManager playbackManager;
-    private String localNetURL = "http://localhost:7575/user";
+    private String localNetURL;
     private String cuid;
 
-    public LocalNetInputHandler(PlaybackManager playbackManager, String cuid) {
+    public NetInputHandler(PlaybackManager playbackManager, String cuid) {
         this.playbackManager = playbackManager;
         this.cuid = cuid;
+        this.localNetURL = NetConfig.getNetUrl() +  "/user";
     }
 
     public void onInputReceived(String input, boolean completed) {
