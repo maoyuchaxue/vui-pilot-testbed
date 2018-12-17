@@ -17,6 +17,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions { exclude 'META-INF/DEPENDENCIES' }
+
 }
 
 dependencies {
@@ -36,6 +38,5 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.8.9'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.9'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
-    implementation files('libs/ht-java-talker-0.3.2-out.jar')
 }
 

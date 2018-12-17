@@ -1,5 +1,7 @@
 package edu.tsinghua.vui.vuitestbed.tts;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,8 +11,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.baidu.util.ConnUtil;
-import com.baidu.util.NetException;
+import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.NetException;
 
 public class TTSNetService {
     
@@ -29,11 +31,11 @@ public class TTSNetService {
         this.secretKey = secretKey;
     }
 
-    public byte[] tts(String text) throws IOException, NetException, TTSException {
+    public byte[] tts(String text) throws IOException, NetException, TTSException, JSONException {
         return tts(text, "default");
     }
 
-    public byte[] tts(String text, String cuid) throws IOException, NetException, TTSException {
+    public byte[] tts(String text, String cuid) throws IOException, NetException, TTSException, JSONException {
         TokenHolder holder = new TokenHolder(appKey, secretKey, TokenHolder.TTS_SCOPE);
         holder.refresh();
         String token = holder.getToken();

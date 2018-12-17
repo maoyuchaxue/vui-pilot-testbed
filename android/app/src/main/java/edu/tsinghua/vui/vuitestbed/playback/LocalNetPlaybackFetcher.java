@@ -1,6 +1,6 @@
 package edu.tsinghua.vui.vuitestbed.playback;
 
-import com.baidu.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

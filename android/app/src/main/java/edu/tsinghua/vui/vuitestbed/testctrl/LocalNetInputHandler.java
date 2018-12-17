@@ -1,7 +1,7 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
-import com.baidu.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
