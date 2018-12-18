@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
 import edu.tsinghua.vui.vuitestbed.testctrl.SingleTest;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
@@ -32,6 +33,7 @@ public class SingleTestActivity extends AppCompatActivity {
         hasTextFeedback = intent.getBooleanExtra("has_text_feedback", false);
         hasGraphFeedback = intent.getBooleanExtra("has_graph_feedback", false);
         // TODO: do something with multi modal configs!
+        MultiModalConfig modalConfig = new MultiModalConfig(hasVoiceFeedback, hasTextFeedback, hasGraphFeedback);
 
         cuid = intent.getStringExtra("test_id");
         String serverURL = intent.getStringExtra("server_url");
@@ -43,7 +45,7 @@ public class SingleTestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        test = new SingleTest(properties, cuid);
+        test = new SingleTest(properties, modalConfig, cuid);
 
         Thread thread = new Thread(test);
 

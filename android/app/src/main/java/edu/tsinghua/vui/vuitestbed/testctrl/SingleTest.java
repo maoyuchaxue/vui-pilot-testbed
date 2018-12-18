@@ -1,5 +1,6 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
+import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
 import edu.tsinghua.vui.vuitestbed.playback.NetPlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
@@ -10,12 +11,14 @@ import java.util.Properties;
 public class SingleTest implements Runnable {
 
     private NetServerNotifier notifier;
+    private MultiModalConfig modalConfig;
     private Properties properties;
     private String cuid;
 
 
-    public SingleTest(Properties properties, String cuid) {
+    public SingleTest(Properties properties, MultiModalConfig modalConfig, String cuid) {
         this.properties = properties;
+        this.modalConfig = modalConfig;
         this.cuid = cuid;
     }
 

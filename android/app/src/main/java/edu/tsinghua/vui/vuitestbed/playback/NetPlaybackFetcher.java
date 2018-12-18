@@ -45,7 +45,7 @@ public class NetPlaybackFetcher implements PlaybackFetcher {
         try {
             byte[] response = ConnUtil.getResponseBytes(conn);
             if (response.length > 0) {
-                playbackManager.addMessage(new String(response));
+                playbackManager.addResponse(new String(response));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -37,7 +37,10 @@ router.get('/user', function(req, res, next) {
 
 
 router.get('/user_fetch', function(req, res, next) {
-  var agent_res = message_queue.agent_to_user.shift();
+  var agent_res = message_queue.agent_to_user.shift(); // TODO: now message_queue is not multimodal
+  if (socket_server.is_wakeup) {
+    agent_res.wakeup = 1;
+  }
   if (agent_res) {
     console.log("user_fetch: " + agent_res);
     res.send(agent_res);
@@ -45,14 +48,6 @@ router.get('/user_fetch', function(req, res, next) {
     res.send("");
   }
 });
-
-router.get('/wakeup_fetch', function(req, res, next) {
-  if (socket_server.is_wakeup()) {
-    res.send('true');
-  } else {
-    res.send('');
-  }
-})
 
 router.get('/agent', function(req, res, next) {
   res.sendFile(path.join(__dirname, "../html/agent.html"));
