@@ -1,45 +1,21 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
-import com.baidu.aip.talker.controller.Session;
-import com.baidu.aip.talker.facade.ISessionController;
-import com.baidu.aip.talker.facade.exception.SendException;
-
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackFetcher;
 
 public class ASRPerformer {
 
     AudioCapturer capturer;
     PlaybackFetcher playbackFetcher;
+    RawAudioDataHandler rawAudioDataHandler;
     boolean stopped;
 
-    public ASRPerformer(PlaybackFetcher playbackFetcher) {
+    public ASRPerformer(PlaybackFetcher playbackFetcher, RawAudioDataHandler rawAudioDataHandler) {
         this.playbackFetcher = playbackFetcher;
+        this.rawAudioDataHandler = rawAudioDataHandler;
         capturer = new AudioCapturer();
     }
-    
-    public Session asr(ISessionController controller) {
-        Session.Config config = Session.createConfig(Session.Config.RoleId.AGENT, false);
-        stopped = false;
-        
-        config.setAgentDn(123);
-        Session session = null;
-        try {
-            session = controller.startSession(config);
-            registerShutdown(controller, session); // ctrl+C exits
 
-            startCapture(session);
-            session.sendEndSpeech();
-            session.destroy();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("meet exception to exit ASR");
-            System.exit(5);
-        }
-
-        return session;
-    }
-
-    private void startCapture(Session session) throws Exception {
+    public void startCapture() {
         capturer.start();
         try {
             while (!stopped) {
@@ -53,29 +29,12 @@ public class ASRPerformer {
                 if (bytes == null) {
                     break;
                 }
-                session.sendFirstRoleSpeech(bytes);
+                rawAudioDataHandler.onInputReceived(bytes);
                 playbackFetcher.fetch(); // fetch response
             };
         } finally {
             capturer.stop();
         }
-
-    }
-    
-    private static void registerShutdown(ISessionController controller, final Session session) {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    session.sendEndSpeech();
-                    Thread.currentThread().sleep(1000);
-                } catch (SendException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
     }
 
     public synchronized void stop() {

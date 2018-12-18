@@ -1,52 +1,50 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
+import android.util.Base64;
+
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
 import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.net.URL;
 
-public class NetInputHandler implements InputHandler {
+public class NetRawAudioDataHandler implements RawAudioDataHandler {
 
     private PlaybackManager playbackManager;
     private String localNetURL;
     private String cuid;
 
-    public NetInputHandler(PlaybackManager playbackManager, String cuid) {
+    public NetRawAudioDataHandler(PlaybackManager playbackManager, String cuid) {
         this.playbackManager = playbackManager;
         this.cuid = cuid;
-        this.localNetURL = NetConfig.getNetUrl() +  "/user";
+        this.localNetURL = NetConfig.getNetUrl() +  "/raw";
     }
 
-    public void onInputReceived(String input, boolean completed) {
+    public void onInputReceived(byte[] input) {
+        String payload = "";
         try {
-            input = new String(input.getBytes("utf-8"), "gbk");
+            payload = Base64.encodeToString(input, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String params = "cuid=" + cuid + "&completed=" + new Boolean(completed).toString();
-        if (input != null) {
-            params += "&text=" + ConnUtil.urlEncodeGBK(ConnUtil.urlEncodeGBK(input));
-        }
+        String params = "cuid=" + cuid;
+        params += "&payload=" + payload;
 
-        String paramedURL = localNetURL + "?" + params;
-
-        System.out.println(paramedURL);
         HttpURLConnection conn = null;
         try {
-            conn = (HttpURLConnection) new URL(paramedURL).openConnection();
+            conn = (HttpURLConnection) new URL(localNetURL).openConnection();
 
             conn.setDoInput(true);
-            conn.setDoOutput(false);
+            conn.setDoOutput(true);
             conn.setConnectTimeout(2000);
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(params.getBytes());
+            outputStream.close();
             conn.getInputStream();
 
         } catch (IOException e) {
