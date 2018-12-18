@@ -24,7 +24,7 @@ public class SingleTest {
         PlaybackManager playbackManager = new PlaybackManager(properties, cuid);
         PlaybackFetcher playbackFetcher = new LocalNetPlaybackFetcher(playbackManager, cuid);
 
-        InputHandler inputHandler = new LocalNetInputHandler(playbackManager, cuid);
+        InputHandler inputHandler = new LocalNetInputHandler(cuid);
         playbackManager.start();
 
         ASRResultListener resultListener = new ASRResultListener(inputHandler);

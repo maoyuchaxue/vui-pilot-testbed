@@ -14,12 +14,10 @@ import java.net.URL;
 
 public class LocalNetInputHandler implements InputHandler {
 
-    private PlaybackManager playbackManager;
     private String localNetURL = "http://localhost:7575/user";
     private String cuid;
 
-    public LocalNetInputHandler(PlaybackManager playbackManager, String cuid) {
-        this.playbackManager = playbackManager;
+    public LocalNetInputHandler(String cuid) {
         this.cuid = cuid;
     }
 
