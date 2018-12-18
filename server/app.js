@@ -34,11 +34,4 @@ app.use(function(err, req, res, next) {
   res.send("internal error: " + err.message);
 });
 
-
-
-var asr_service = require('./util/asr-service');
-asr_service.start('test_id');
-asr_service.sendBytes([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-asr_service.stop()
-
 module.exports = app;

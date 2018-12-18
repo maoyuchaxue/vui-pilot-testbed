@@ -5,6 +5,7 @@ var fs = require('fs');
 var script_json = fs.readFileSync('script/test.json');
 var script = JSON.parse(script_json);
 var module_socket = null;
+var wakeup = false;
 
 module.exports = {
     socket: function(socket) {
@@ -21,5 +22,11 @@ module.exports = {
     },
     set_options: function(options) {
         module_socket.emit('options', options);
+    },
+    set_wakeup: function(new_wakeup) {
+        wakeup = new_wakeup;
+    },
+    is_wakeup: function() {
+        return wakeup;
     }
 }

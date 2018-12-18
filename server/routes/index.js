@@ -1,9 +1,30 @@
 var express = require('express');
 var path = require('path');
 var router = express.Router();
+var 
 
 var message_queue = require('../util/message-queue');
 var socket_server = require('../util/socket-server');
+var asr_service = require('../util/asr-service');
+
+router.get('/control', function(req, res, next) {
+  console.log(req.query.cuid, req.query.start, req.query.end);
+  if (req.query.start == 1) {
+    message_queue.agent_to_user = [];
+    asr_service.start(req.query.cuid);
+  }
+  if (req.query.end == 1) {
+    asr_service.stop();
+  }
+  res.status(200);
+})
+
+router.post('/raw', function(req, res, next) {
+  console.log(req.body.cuid, req.query.payload);
+  let buff = new Buffer.from(req.query.payload, 'base64');
+  asr_service.sendBytes(buff);
+  res.status(200);
+})
 
 router.get('/user', function(req, res, next) {
   console.log(req.query.text, req.query.cuid, req.query.completed);
@@ -24,6 +45,14 @@ router.get('/user_fetch', function(req, res, next) {
     res.send("");
   }
 });
+
+router.get('/wakeup_fetch', function(req, res, next) {
+  if (socket_server.is_wakeup()) {
+    res.send('true');
+  } else {
+    res.send('');
+  }
+})
 
 router.get('/agent', function(req, res, next) {
   res.sendFile(path.join(__dirname, "../html/agent.html"));
