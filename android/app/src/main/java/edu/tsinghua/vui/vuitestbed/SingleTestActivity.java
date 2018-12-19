@@ -1,8 +1,11 @@
 package edu.tsinghua.vui.vuitestbed;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +30,7 @@ public class SingleTestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkPermission();
         Intent intent = getIntent();
 
         hasVoiceFeedback = intent.getBooleanExtra("has_voice_feedback", true);
@@ -55,10 +59,11 @@ public class SingleTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 test.stop();
+                SingleTestActivity.this.finish();
             }
         });
 
-        thread.run();
+        thread.start();
     }
 
     private Properties getProperties() throws Exception {
@@ -74,5 +79,21 @@ public class SingleTestActivity extends AppCompatActivity {
             }
         }
         return properties;
+    }
+
+    private void checkPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    123);
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
+                    123);
+        }
     }
 }

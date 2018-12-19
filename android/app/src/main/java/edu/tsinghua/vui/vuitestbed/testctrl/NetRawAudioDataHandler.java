@@ -1,6 +1,7 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
 import android.util.Base64;
+import android.util.Log;
 
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
 import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
@@ -27,7 +28,7 @@ public class NetRawAudioDataHandler implements RawAudioDataHandler {
     public void onInputReceived(byte[] input) {
         String payload = "";
         try {
-            payload = Base64.encodeToString(input, Base64.DEFAULT);
+            payload = Base64.encodeToString(input, Base64.URL_SAFE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,10 +48,14 @@ public class NetRawAudioDataHandler implements RawAudioDataHandler {
             outputStream.close();
             conn.getInputStream();
 
+            Log.i("VUI", params);
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cannot access net server");
             return ;
+        } finally {
+            conn.disconnect();
         }
     }
 }

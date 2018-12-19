@@ -1,9 +1,6 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
-import com.baidu.aip.talker.controller.Session;
-import com.baidu.aip.talker.facade.Controller;
-import com.baidu.aip.talker.facade.upload.LogBeforeUploadListener;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -13,7 +10,7 @@ public class MainTestor {
 
     public static void main(String[] args) throws Exception {
         Properties properties = getProperties();
-        SingleTest test = new SingleTest(properties, "default");
+        SingleTest test = new SingleTest(properties, null, "default");
         test.run();
     }
     

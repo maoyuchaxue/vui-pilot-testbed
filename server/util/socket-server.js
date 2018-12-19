@@ -12,7 +12,7 @@ module.exports = {
         module_socket = socket;
         socket.on('agent_msg', function(text) {
             console.log("agent_msg: " + text);
-            message_queue.agent_to_user.push(text);
+            message_queue.agent_to_user.push({text: text});
             // socket.emit('user_msg', text);
         });
         socket.emit('options', script);

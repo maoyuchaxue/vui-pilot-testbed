@@ -1,6 +1,7 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
+import edu.tsinghua.vui.vuitestbed.playback.MultiModalResponseHandler;
 import edu.tsinghua.vui.vuitestbed.playback.NetPlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
@@ -31,7 +32,8 @@ public class SingleTest implements Runnable {
     public void run() {
         notifier = new NetServerNotifier(cuid);
         notifier.notifyStart();
-        PlaybackManager playbackManager = new PlaybackManager(properties, cuid);
+        MultiModalResponseHandler responseHandler = new MultiModalResponseHandler(modalConfig);
+        PlaybackManager playbackManager = new PlaybackManager(responseHandler, properties, cuid);
         PlaybackFetcher playbackFetcher = new NetPlaybackFetcher(playbackManager, cuid);
 
         RawAudioDataHandler rawAudioDataHandler = new NetRawAudioDataHandler(playbackManager, cuid);
@@ -40,11 +42,11 @@ public class SingleTest implements Runnable {
         performer = new ASRPerformer(playbackFetcher, rawAudioDataHandler);
         performer.startCapture();
         playbackManager.stop();
+        notifier.notifyEnd();
     }
 
     public synchronized void stop() {
         performer.stop();
-        notifier.notifyEnd();
     }
 
 }
