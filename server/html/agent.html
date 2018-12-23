@@ -27,6 +27,10 @@
             </div>
             <div id="reply-box">
                 <div id="reply-inner-box">
+                    <div id="wakeup-button" v-bind:class="[wakeup ? wakeupButtonClass : unwakeupButtonClass, buttonClass]" v-on:click="triggerWakeup()">
+                        <span id="wakeup-button-fui" class="fui-eye" v-if="wakeup">取消唤醒</span>
+                        <span id="wakeup-button-fui" class="fui-eye" v-else>告知唤醒</span>
+                    </div>
                     <div id="reply-area">
                         <div v-for="(slice, slice_id) in reply" class="btn reply-slice">
                             <template v-for="span in slice.spans" class="span">
@@ -42,7 +46,7 @@
                         </div>
                     </div>
                     <div id="reply-button" class="btn btn-primary" v-on:click="submitReply()">
-                        <span id="reply-button-fui" class="fui-upload"></span>
+                        <span id="reply-button-fui" class="fui-upload">回复文本</span>
                     </div>
                 </div>
             </div>

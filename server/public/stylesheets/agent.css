@@ -44,6 +44,17 @@
     margin: auto;
 }
 
+#wakeup-button {
+    width: 10%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: inherit;
+}
+
+#wakeup-button-fui {
+    margin: auto;
+}
+
 #root {
     display: -webkit-flex;
     display: flex;
@@ -125,4 +136,8 @@
 
 .option-button {
     padding: 8px 12px;
+}
+
+.fui-eye::before, .fui-upload::before {
+    padding-right: 4px;
 }

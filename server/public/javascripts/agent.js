@@ -2,7 +2,11 @@
 var data = {
     msgs: [],
     options: [],
-    reply: []
+    reply: [],
+    wakeup: false,
+    wakeupButtonClass: "btn-info",
+    unwakeupButtonClass: "btn-primary",
+    buttonClass: "btn"
 }
 
 var socket = null;
@@ -104,7 +108,11 @@ agent = function() {
             addAgentMsg: add_agent_msg,
             removeSlice: remove_slice,
             submitReply: submit_reply,
-            filterSlot: filter_slot
+            filterSlot: filter_slot,
+            triggerWakeup: function() {
+                data.wakeup = !data.wakeup;
+                socket.emit('wakeup', data.wakeup);
+            }
         }
     })
     

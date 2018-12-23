@@ -1,5 +1,9 @@
 package edu.tsinghua.vui.vuitestbed.playback;
 
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import java.util.Properties;
@@ -9,14 +13,16 @@ public class PlaybackManager {
     private Thread handlerThread;
     private PlaybackHandler handler;
     private MultiModalResponseHandler responseHandler;
+    private Handler messageToUIHandler;
    
-    public PlaybackManager(MultiModalResponseHandler responseHandler, Properties properties, String cuid) {
+    public PlaybackManager(MultiModalResponseHandler responseHandler, Handler messageToUIHandler, Properties properties, String cuid) {
         String appKey = properties.getProperty("app.appKey");
         String secretKey = properties.getProperty("app.appSecret");
         handler = new TTSPlaybackHandler(appKey, secretKey);
         messageQueue = new PlaybackMessageQueue();
         handlerThread = new Thread(new PlaybackThread(handler, messageQueue, cuid));
         this.responseHandler = responseHandler;
+        this.messageToUIHandler = messageToUIHandler;
     }
 
     public void start() {
@@ -25,6 +31,7 @@ public class PlaybackManager {
 
     public void addResponse(String response) {
         try {
+            Log.i("VUI", response);
             JSONObject json = new JSONObject(response);
             if (json.has("text")) {
                 String text = json.getString("text");
@@ -35,11 +42,15 @@ public class PlaybackManager {
             }
             if (json.has("wakeup")) {
                 responseHandler.onWakeup();
+            } else {
+                responseHandler.onUnwakeup();
             }
             if (json.has("graph")) {
                 String graphURL = json.getString("url");
                 responseHandler.onAddGraph(graphURL);
             }
+            Message message = messageToUIHandler.obtainMessage(0, responseHandler);
+            messageToUIHandler.sendMessage(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

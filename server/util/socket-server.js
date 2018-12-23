@@ -15,6 +15,10 @@ module.exports = {
             message_queue.agent_to_user.push({text: text});
             // socket.emit('user_msg', text);
         });
+        socket.on('wakeup', function(new_wakeup) {
+            wakeup = new_wakeup;
+            console.log("wakeup " + new_wakeup);
+        })
         socket.emit('options', script);
     },
     send: function(text) {

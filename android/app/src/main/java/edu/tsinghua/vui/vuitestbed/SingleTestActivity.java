@@ -5,16 +5,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
+import edu.tsinghua.vui.vuitestbed.playback.MultiModalResponseHandler;
 import edu.tsinghua.vui.vuitestbed.testctrl.SingleTest;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
@@ -26,6 +30,9 @@ public class SingleTestActivity extends AppCompatActivity {
     private boolean hasTextFeedback;
     private boolean hasGraphFeedback;
     private String cuid;
+    private ImageView wakeupImage;
+    private ImageView responseImageView;
+    private TextView responseTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +56,6 @@ public class SingleTestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        test = new SingleTest(properties, modalConfig, cuid);
-
-        Thread thread = new Thread(test);
-
         setContentView(R.layout.activity_single_test);
         Button endTestButton = (Button) findViewById(R.id.end_test_button);
         endTestButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +65,23 @@ public class SingleTestActivity extends AppCompatActivity {
                 SingleTestActivity.this.finish();
             }
         });
+        wakeupImage = findViewById(R.id.wakeup_imageview);
+        responseImageView = findViewById(R.id.response_imageview);
+        responseTextView = findViewById(R.id.response_textview);
+        clear();
 
+        MultiModalResponseHandler responseHandler = new MultiModalResponseHandler(this, modalConfig);
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                MultiModalResponseHandler resHandler = (MultiModalResponseHandler) msg.obj;
+                resHandler.update();
+            }
+        };
+
+        test = new SingleTest(responseHandler, handler, properties, cuid);
+
+        Thread thread = new Thread(test);
         thread.start();
     }
 
@@ -95,5 +114,29 @@ public class SingleTestActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
                     123);
         }
+    }
+
+    public void setWakeup() {
+        wakeupImage.setVisibility(View.VISIBLE);
+    }
+
+    public void setUnwakeup() {
+        wakeupImage.setVisibility(View.INVISIBLE);
+    }
+
+    public void addText(String text) {
+        responseTextView.setText(text);
+        responseTextView.setVisibility(View.VISIBLE);
+    }
+
+    public void addGraph(String url) {
+        new DownloadImageTask(responseImageView).execute(url);
+    }
+
+    public void clear() {
+        responseTextView.setText("");
+        responseTextView.setVisibility(View.GONE);
+        responseImageView.setVisibility(View.GONE);
+        wakeupImage.setVisibility(View.INVISIBLE);
     }
 }

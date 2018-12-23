@@ -1,5 +1,8 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
+import android.os.Handler;
+
+import edu.tsinghua.vui.vuitestbed.SingleTestActivity;
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalResponseHandler;
 import edu.tsinghua.vui.vuitestbed.playback.NetPlaybackFetcher;
@@ -12,14 +15,15 @@ import java.util.Properties;
 public class SingleTest implements Runnable {
 
     private NetServerNotifier notifier;
-    private MultiModalConfig modalConfig;
+    private MultiModalResponseHandler responseHandler;
+    private Handler messageToUIHandler;
     private Properties properties;
     private String cuid;
 
-
-    public SingleTest(Properties properties, MultiModalConfig modalConfig, String cuid) {
+    public SingleTest(MultiModalResponseHandler responseHandler, Handler messageToUIHandler, Properties properties, String cuid) {
+        this.responseHandler = responseHandler;
+        this.messageToUIHandler = messageToUIHandler;
         this.properties = properties;
-        this.modalConfig = modalConfig;
         this.cuid = cuid;
     }
 
@@ -32,8 +36,7 @@ public class SingleTest implements Runnable {
     public void run() {
         notifier = new NetServerNotifier(cuid);
         notifier.notifyStart();
-        MultiModalResponseHandler responseHandler = new MultiModalResponseHandler(modalConfig);
-        PlaybackManager playbackManager = new PlaybackManager(responseHandler, properties, cuid);
+        PlaybackManager playbackManager = new PlaybackManager(responseHandler, messageToUIHandler, properties, cuid);
         PlaybackFetcher playbackFetcher = new NetPlaybackFetcher(playbackManager, cuid);
 
         RawAudioDataHandler rawAudioDataHandler = new NetRawAudioDataHandler(playbackManager, cuid);

@@ -1,7 +1,5 @@
 package edu.tsinghua.vui.vuitestbed.testctrl;
 
-import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
-
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -10,7 +8,7 @@ public class MainTestor {
 
     public static void main(String[] args) throws Exception {
         Properties properties = getProperties();
-        SingleTest test = new SingleTest(properties, null, "default");
+        SingleTest test = new SingleTest(null, null, properties, "default");
         test.run();
     }
     
