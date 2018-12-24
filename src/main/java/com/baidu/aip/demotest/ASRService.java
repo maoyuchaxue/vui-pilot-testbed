@@ -10,7 +10,9 @@ import com.baidu.aip.talker.facade.upload.LogBeforeUploadListener;
 public class ASRService {
 
     private Properties properties;
+    private Controller controller;
     private Session session;
+    private LocalNetInputHandler inputHandler;
 
     public ASRService() {
         try {
@@ -18,18 +20,18 @@ public class ASRService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void start(String cuid) {
-        InputHandler inputHandler = new LocalNetInputHandler(cuid);
+        
+        inputHandler = new LocalNetInputHandler();
         ASRResultListener resultListener = new ASRResultListener(inputHandler);
-        Controller controller = null;
         try {
             controller = new Controller(new LogBeforeUploadListener(), resultListener, properties);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public void start(String cuid) {
+        inputHandler.setCuid(cuid);
         Session.Config config = Session.createConfig(Session.Config.RoleId.AGENT, false);
         config.setAgentDn(123);
         try {
