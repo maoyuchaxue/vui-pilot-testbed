@@ -19,17 +19,32 @@
             </div>
             <div id="choose-box" class="flex-with-title">
                 <span id="choose-title" class="flex-title">可选回复</span>
-                <div id="choose-list" class="flex-remains">
-                    <button v-for="option in options" :key="option.id" v-on:click="addAgentMsg(option.text)" class="option-button btn btn-primary">
-                        {{ filterSlot(option.text) }}
-                    </button>
+                <div id="choose-inner-box" class="flex-remains">
+                    <div id="section-list">
+                        <button v-for="sect in sections" v-on:click="chooseSection(sect.name)" class="section-button btn btn-info">
+                            {{ sect.description }}
+                        </button>
+                    </div>
+                    <div id="choose-list">
+                        <button v-for="option in options" :key="option.id" v-on:click="addAgentMsg(option.content)" class="option-button btn btn-primary">
+                            {{ option.content.name }}
+                        </button>
+                    </div>
                 </div>
             </div>
             <div id="reply-box">
                 <div id="reply-inner-box">
-                    <div id="wakeup-button" v-bind:class="[wakeup ? wakeupButtonClass : unwakeupButtonClass, buttonClass]" v-on:click="triggerWakeup()">
-                        <span id="wakeup-button-fui" class="fui-eye" v-if="wakeup">取消唤醒</span>
-                        <span id="wakeup-button-fui" class="fui-eye" v-else>告知唤醒</span>
+                    <div id="wakeup-buttons">                    
+                        <div id="wakeup-button" v-bind:class="[wakeup ? wakeupButtonClass : unwakeupButtonClass, buttonClass]" v-on:click="triggerWakeup()">
+                            <span id="unwakeup-span" class="fui-eye" v-if="wakeup">取消（图标变灰）</span>
+                            <span id="wakeup-span" class="fui-eye wakeup-button-fui" v-else>唤醒（图标高亮）</span>
+                        </div>
+                        <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="voiceWakeup()">
+                            <span id="wakeup-span-voice" class="fui-volume wakeup-button-fui">唤醒（语音问候）</span>
+                        </div>
+                        <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="shakingWakeup()">
+                            <span id="wakeup-span-voice" class="fui-alert-circle wakeup-button-fui">唤醒（手机震动）</span>
+                        </div>
                     </div>
                     <div id="reply-area">
                         <div v-for="(slice, slice_id) in reply" class="btn reply-slice">

@@ -3,6 +3,7 @@ var data = {
     msgs: [],
     options: [],
     reply: [],
+    sections: [],
     wakeup: false,
     wakeupButtonClass: "btn-info",
     unwakeupButtonClass: "btn-primary",
@@ -26,24 +27,29 @@ disconnect_from_server = function() {
 
 receive_options = function(options) {
     console.log(options);
-    data.options = options.map(function(cur, ind) {return {text:cur, id:ind}});
+    data.options = options.map(function(cur, ind) {return {content:cur, id:ind}});
+}
+
+receive_sections = function(sections) {
+    console.log(sections);
+    data.sections = sections;
 }
 
 clear_msg = function() {
     data.msgs = [];
 }
 
-send_agent_msg = function(text) {
-    data.msgs.push({text:text, is_user:false});
+send_agent_msg = function(msg) {
+    data.msgs.push({text:msg.text, is_user:false});
     var ele = document.getElementById('msg-list');
     ele.scrollTop = ele.scrollHeight;
-    console.log("send: "+ text);
-    socket.emit('agent_msg', text);
+    console.log("send: ", msg);
+    socket.emit('agent_msg', msg);
     data.reply = [];
 }
 
-add_agent_msg = function(text) {
-    texts = text.split('_');
+add_agent_msg = function(content) {
+    texts = content.text.split('_');
     spans = [];
     for (i in texts) {
         if (texts[i][0] == '{') {
@@ -63,7 +69,8 @@ add_agent_msg = function(text) {
 
     data.reply.push({
         spans: spans,
-        id: data.reply.length
+        id: data.reply.length,
+        img: content.img
     })
 }
 
@@ -72,6 +79,7 @@ remove_slice = function(slice_id) {
 }
 
 submit_reply = function() {
+    var res = {};
     var text = "";
     for (i in data.reply) {
         for (j in data.reply[i].spans) {
@@ -82,8 +90,14 @@ submit_reply = function() {
                 return ;
             }
         }
+
+        if (data.reply[i].img) {
+            res.img = data.reply[i].img;
+        }
     }
-    send_agent_msg(text);
+    res.text = text;
+
+    send_agent_msg(res);
 }
 
 filter_slot = function(text) {
@@ -99,6 +113,10 @@ filter_slot = function(text) {
     return result_text;
 }
 
+choose_section = function(section) {
+    socket.emit('set_section', section);
+}
+
 agent = function() {
     var vm = new Vue({
         el: '#root',
@@ -109,10 +127,13 @@ agent = function() {
             removeSlice: remove_slice,
             submitReply: submit_reply,
             filterSlot: filter_slot,
+            chooseSection: choose_section,
             triggerWakeup: function() {
                 data.wakeup = !data.wakeup;
                 socket.emit('wakeup', data.wakeup);
-            }
+            },
+            voiceWakeup: function() { socket.emit('voice-wakeup'); },
+            shakingWakeup: function() { socket.emit('shaking-wakeup'); }
         }
     })
     
@@ -120,5 +141,6 @@ agent = function() {
     socket.on('user_msg', receive_user_msg);
     socket.on('disconnect', disconnect_from_server);
     socket.on('options', receive_options);
+    socket.on('sections', receive_sections);
 }
 

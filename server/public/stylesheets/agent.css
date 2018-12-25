@@ -44,15 +44,33 @@
     margin: auto;
 }
 
-#wakeup-button {
+#unwakeup-button {
     width: 10%;
     flex-shrink: 0;
     flex-grow: 0;
     display: inherit;
 }
 
-#wakeup-button-fui {
+#wakeup-button {
+    flex-grow: 1;
+    border-radius: 0;
+    display: inherit;
+}
+
+#wakeup-span, #wakeup-span-voice, #unwakeup-span {
     margin: auto;
+}
+
+#wakeup-button-with-voice {
+    flex-grow: 1;
+    border-radius: 0;
+    display: inherit;
+}
+
+#wakeup-buttons {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
 }
 
 #root {
@@ -130,14 +148,35 @@
     padding-right: 10px;
 }
 
+#choose-inner-box {
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 #choose-list {
+    flex-grow: 1;
     overflow-y: scroll;
+}
+
+#section-list {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-button {
+    border-radius: 0;
 }
 
 .option-button {
     padding: 8px 12px;
 }
 
-.fui-eye::before, .fui-upload::before {
+.fui-eye::before, .fui-upload::before, .fui-volume::before, .fui-alert-circle::before {
     padding-right: 4px;
 }

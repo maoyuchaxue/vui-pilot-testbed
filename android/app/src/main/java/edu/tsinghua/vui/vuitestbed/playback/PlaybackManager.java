@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import java.util.Properties;
 
+import edu.tsinghua.vui.vuitestbed.util.NetConfig;
+
 public class PlaybackManager {
     private PlaybackMessageQueue messageQueue;
     private Thread handlerThread;
@@ -45,9 +47,9 @@ public class PlaybackManager {
             } else {
                 responseHandler.onUnwakeup();
             }
-            if (json.has("graph")) {
-                String graphURL = json.getString("url");
-                responseHandler.onAddGraph(graphURL);
+            if (json.has("img")) {
+                String graphURL = json.getString("img");
+                responseHandler.onAddGraph(NetConfig.getNetUrl() + graphURL);
             }
             Message message = messageToUIHandler.obtainMessage(0, responseHandler);
             messageToUIHandler.sendMessage(message);
