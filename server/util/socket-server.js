@@ -24,6 +24,12 @@ module.exports = {
         });
         socket.on('set_section', function(section) {
             socket.emit('options', scripts[section]);
+        });
+        socket.on('voice-wakeup', function() {
+            message_queue.agent_to_user.push({text: "在"});
+        });
+        socket.on('vibrate-wakeup', function() {
+            message_queue.agent_to_user.push({vibrate: true});
         })
         socket.emit('sections', sections);
         socket.emit('options', scripts["default"]);

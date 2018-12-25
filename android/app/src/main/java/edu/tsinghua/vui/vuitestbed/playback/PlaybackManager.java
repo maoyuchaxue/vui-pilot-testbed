@@ -47,6 +47,11 @@ public class PlaybackManager {
             } else {
                 responseHandler.onUnwakeup();
             }
+            if (json.has("vibrate")) {
+                responseHandler.onVibrate();
+            } else {
+                responseHandler.onUnvibrate();
+            }
             if (json.has("img")) {
                 String graphURL = json.getString("img");
                 responseHandler.onAddGraph(NetConfig.getNetUrl() + graphURL);

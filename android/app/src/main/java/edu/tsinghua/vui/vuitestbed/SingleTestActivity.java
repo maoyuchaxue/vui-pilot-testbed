@@ -1,12 +1,16 @@
 package edu.tsinghua.vui.vuitestbed;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -33,6 +37,7 @@ public class SingleTestActivity extends AppCompatActivity {
     private ImageView wakeupImage;
     private ImageView responseImageView;
     private TextView responseTextView;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +119,8 @@ public class SingleTestActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
                     123);
         }
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     public void setWakeup() {
@@ -131,6 +138,15 @@ public class SingleTestActivity extends AppCompatActivity {
 
     public void addGraph(String url) {
         new DownloadImageTask(responseImageView).execute(url);
+    }
+
+    public void vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(500);
+        }
     }
 
     public void clear() {

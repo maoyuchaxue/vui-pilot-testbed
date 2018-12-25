@@ -6,6 +6,7 @@ import edu.tsinghua.vui.vuitestbed.SingleTestActivity;
 
 public class MultiModalResponseHandler {
     private MultiModalConfig modalConfig;
+    private Boolean vibrate;
     private Boolean wakeup;
     private Boolean updated;
     private String text;
@@ -39,6 +40,14 @@ public class MultiModalResponseHandler {
             }
             wakeup = false;
         }
+    }
+
+    public void onVibrate() {
+        vibrate = true;
+    }
+
+    public void onUnvibrate() {
+        vibrate = false;
     }
 
     public void onAddText(String text) {
@@ -77,6 +86,9 @@ public class MultiModalResponseHandler {
                     activity.setWakeup();
                 } else {
                     activity.setUnwakeup();
+                }
+                if (vibrate) {
+                    activity.vibrate();
                 }
             }
         }

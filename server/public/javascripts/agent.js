@@ -133,7 +133,7 @@ agent = function() {
                 socket.emit('wakeup', data.wakeup);
             },
             voiceWakeup: function() { socket.emit('voice-wakeup'); },
-            shakingWakeup: function() { socket.emit('shaking-wakeup'); }
+            vibrateWakeup: function() { socket.emit('vibrate-wakeup'); }
         }
     })
     
