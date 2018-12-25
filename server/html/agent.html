@@ -20,6 +20,11 @@
             <div id="choose-box" class="flex-with-title">
                 <span id="choose-title" class="flex-title">可选回复</span>
                 <div id="choose-inner-box" class="flex-remains">
+                    <div id="script-list">
+                        <button v-for="script in scripts" v-on:click="chooseScript(script.filename)" class="script-button btn btn-inverse">
+                            {{ script.description }}
+                        </button>
+                    </div>
                     <div id="section-list">
                         <button v-for="sect in sections" v-on:click="chooseSection(sect.name)" class="section-button btn btn-info">
                             {{ sect.description }}

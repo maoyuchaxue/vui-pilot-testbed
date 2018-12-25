@@ -4,6 +4,7 @@ var data = {
     options: [],
     reply: [],
     sections: [],
+    scripts: [],
     wakeup: false,
     wakeupButtonClass: "btn-info",
     unwakeupButtonClass: "btn-primary",
@@ -26,13 +27,15 @@ disconnect_from_server = function() {
 }
 
 receive_options = function(options) {
-    console.log(options);
     data.options = options.map(function(cur, ind) {return {content:cur, id:ind}});
 }
 
 receive_sections = function(sections) {
-    console.log(sections);
     data.sections = sections;
+}
+
+receive_scripts = function(scripts) {
+    data.scripts = scripts;
 }
 
 clear_msg = function() {
@@ -43,7 +46,6 @@ send_agent_msg = function(msg) {
     data.msgs.push({text:msg.text, is_user:false});
     var ele = document.getElementById('msg-list');
     ele.scrollTop = ele.scrollHeight;
-    console.log("send: ", msg);
     socket.emit('agent_msg', msg);
     data.reply = [];
 }
@@ -117,6 +119,10 @@ choose_section = function(section) {
     socket.emit('set_section', section);
 }
 
+choose_script = function(script) {
+    socket.emit('set_script', script);
+}
+
 agent = function() {
     var vm = new Vue({
         el: '#root',
@@ -128,6 +134,7 @@ agent = function() {
             submitReply: submit_reply,
             filterSlot: filter_slot,
             chooseSection: choose_section,
+            chooseScript: choose_script,
             triggerWakeup: function() {
                 data.wakeup = !data.wakeup;
                 socket.emit('wakeup', data.wakeup);
@@ -142,5 +149,6 @@ agent = function() {
     socket.on('disconnect', disconnect_from_server);
     socket.on('options', receive_options);
     socket.on('sections', receive_sections);
+    socket.on('scripts', receive_scripts);
 }
 

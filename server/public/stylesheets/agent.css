@@ -160,7 +160,7 @@
     overflow-y: scroll;
 }
 
-#section-list {
+#section-list, #script-list {
     flex-grow: 0;
     flex-shrink: 0;
     width: auto;
@@ -169,7 +169,7 @@
     flex-direction: column;
 }
 
-.section-button {
+.section-button, .script-button {
     border-radius: 0;
 }
 
