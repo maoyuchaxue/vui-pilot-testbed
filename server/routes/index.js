@@ -36,7 +36,7 @@ router.get('/user', function(req, res, next) {
     socket_server.send(req.query.text);
   }
 
-  log(req.query.text, 'user', req.query.cuid);
+  log(decodeURIComponent(req.query.text), 'user', req.query.cuid);
   res.send("").status(200);
 });
 

@@ -14,7 +14,7 @@ var data = {
 var socket = null;
 
 receive_user_msg = function(user_msg) {
-    user_msg = decodeURI(user_msg);
+    user_msg = decodeURIComponent(user_msg);
     if (user_msg.length > 0) {
         data.msgs.push({text:user_msg, is_user:true});
     }
