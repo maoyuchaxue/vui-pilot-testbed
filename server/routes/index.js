@@ -25,7 +25,7 @@ router.get('/control', function(req, res, next) {
 
 router.post('/raw', function(req, res, next) {
   let buff = new Buffer.from(req.body.payload, 'base64');
-  log(req.body.payload, 'raw', req.body.cuid);
+  log(req.body.payload, 'raw', req.body.cuid, 'debug');
 
   asr_service.sendBytes([...buff]);
   res.send("").status(200);
@@ -43,19 +43,18 @@ router.get('/user', function(req, res, next) {
 
 router.get('/user_fetch', function(req, res, next) {
   var agent_res = message_queue.agent_to_user.shift();
-  if (socket_server.is_wakeup()) {
-    if (!agent_res) {
-      agent_res = {};
-    }
+  if (!agent_res) {
+    agent_res = {};
+  }
 
-    agent_res.wakeup = 1;
-  }
-  if (agent_res) {
-    log(JSON.stringify(agent_res), 'fetch', req.query.cuid);
-    res.send(agent_res);
+  if (socket_server.is_wakeup()) {
+    agent_res.wakeup = '1';
   } else {
-    res.send("");
+    agent_res.wakeup = '0';
   }
+
+  log(JSON.stringify(agent_res), 'fetch', req.query.cuid);
+  res.send(agent_res);
 });
 
 router.get('/agent', function(req, res, next) {

@@ -41,7 +41,7 @@ module.exports = {
             socket.emit('options', cur_script[section]);
         });
         socket.on('voice-wakeup', function() {
-            message_queue.agent_to_user.push({text: "在"});
+            message_queue.agent_to_user.push({text: "在", hide:'1'});
         });
         socket.on('vibrate-wakeup', function() {
             message_queue.agent_to_user.push({vibrate: true});

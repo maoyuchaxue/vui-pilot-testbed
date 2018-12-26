@@ -48,12 +48,12 @@ public class SingleTestActivity extends AppCompatActivity {
         hasVoiceFeedback = intent.getBooleanExtra("has_voice_feedback", true);
         hasTextFeedback = intent.getBooleanExtra("has_text_feedback", false);
         hasGraphFeedback = intent.getBooleanExtra("has_graph_feedback", false);
-        // TODO: do something with multi modal configs!
         MultiModalConfig modalConfig = new MultiModalConfig(hasVoiceFeedback, hasTextFeedback, hasGraphFeedback);
 
         cuid = intent.getStringExtra("test_id");
         String serverURL = intent.getStringExtra("server_url");
         NetConfig.setNetUrl(serverURL);
+        ImageCacheMap.init();
 
         try {
             properties = getProperties();

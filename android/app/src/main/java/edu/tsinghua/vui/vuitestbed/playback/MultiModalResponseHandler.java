@@ -35,7 +35,7 @@ public class MultiModalResponseHandler {
 
     public void onUnwakeup() {
         synchronized (this) {
-            if (wakeup == false) {
+            if (wakeup == true) {
                 updated = true;
             }
             wakeup = false;
@@ -43,6 +43,7 @@ public class MultiModalResponseHandler {
     }
 
     public void onVibrate() {
+        updated = true;
         vibrate = true;
     }
 
@@ -91,6 +92,7 @@ public class MultiModalResponseHandler {
                     activity.vibrate();
                 }
             }
+            updated = false;
         }
     }
 }

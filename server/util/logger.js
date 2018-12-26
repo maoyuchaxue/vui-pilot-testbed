@@ -12,13 +12,18 @@ const logger = createLogger({
     logFormat
   ),
   transports: [
-    new transports.File({ filename: "../logs/server.log" })
+    new transports.File({ filename: "../logs/server.log", level: "info" }),
+    new transports.File({ filename: "../logs/audio.log", level: "debug" }),
   ]
 });
 
-function log(message, method, cuid) {
+function log(message, method, cuid, level) {
+  if (!level) {
+    level = 'info';
+  };
+
   logger.log({
-    level: 'info',
+    level: level,
     message: message,
     method: method,
     cuid: cuid

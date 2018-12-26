@@ -20,8 +20,12 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         String url = urls[0];
         Bitmap res = null;
         try {
-            InputStream in = new java.net.URL(url).openStream();
-            res = BitmapFactory.decodeStream(in);
+            res = ImageCacheMap.get(url);
+            if (res == null) {
+                InputStream in = new java.net.URL(url).openStream();
+                res = BitmapFactory.decodeStream(in);
+                ImageCacheMap.put(url, res);
+            }
         } catch (Exception e) {
             Log.e("VUI", e.getMessage());
             e.printStackTrace();

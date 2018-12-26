@@ -21,6 +21,10 @@ public class PlaybackMessageQueue {
         return list.poll();
     }
 
+    public synchronized boolean isEmpty() {
+        return list.isEmpty();
+    }
+
     public synchronized void stop() {
         this.stopped = true;
     }

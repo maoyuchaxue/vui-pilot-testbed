@@ -2,6 +2,8 @@ package edu.tsinghua.vui.vuitestbed.playback;
 
 public class PlaybackThread implements Runnable {
 
+    private final static int mills = 20;
+
     private PlaybackHandler playbackHandler;
     private PlaybackMessageQueue messageQueue;
     private String cuid;
@@ -17,7 +19,10 @@ public class PlaybackThread implements Runnable {
             String text = messageQueue.getMessage();
             if (text != null) {
                 System.out.println("now playing: " + text);
-                playbackHandler.play(text, cuid);
+                playbackHandler.register(text, cuid);
+                while ((!playbackHandler.ended()) && (messageQueue.isEmpty())) {
+                    playbackHandler.play(mills);
+                }
             }
         }
     }

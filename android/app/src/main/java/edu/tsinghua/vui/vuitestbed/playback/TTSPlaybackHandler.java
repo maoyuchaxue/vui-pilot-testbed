@@ -14,6 +14,9 @@ public class TTSPlaybackHandler implements PlaybackHandler {
     final public static int sampleSizeInBits = 16;
 
     private AudioTrack audioTrack;
+    private byte[] bytes;
+    private int length;
+    private int current;
 
     public TTSPlaybackHandler(String appKey, String secretKey) {
         netService = new TTSNetService(appKey, secretKey);
@@ -30,18 +33,35 @@ public class TTSPlaybackHandler implements PlaybackHandler {
         audioTrack.play();
     }
 
-    public void play(String text, String cuid) {
-        byte[] bytes = null;
-        try {
-            bytes = netService.tts(text, cuid);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void register(String text, String cuid) {
+        synchronized (this) {
+            bytes = null;
+            try {
+                bytes = netService.tts(text, cuid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        if (bytes != null) {
-            System.out.println(bytes.length);
-            audioTrack.write(bytes, 0, bytes.length);
-            audioTrack.flush();
+            current = 0;
+            length = bytes.length;
         }
+    }
+
+    public void play(int mills) {
+        synchronized (this) {
+            if (bytes != null) {
+                int curLength = mills * 16;
+                if (curLength + current > length) {
+                    curLength = length - current;
+                }
+                audioTrack.write(bytes, current, curLength);
+                audioTrack.flush();
+                current += curLength;
+            }
+        }
+    }
+
+    public boolean ended() {
+        return current == length;
     }
 }

@@ -33,19 +33,22 @@ public class PlaybackManager {
 
     public void addResponse(String response) {
         try {
-            Log.i("VUI", response);
             JSONObject json = new JSONObject(response);
             if (json.has("text")) {
                 String text = json.getString("text");
                 if (responseHandler.hasVoiceFeedback()) {
                     messageQueue.addMessage(text);
                 }
-                responseHandler.onAddText(text);
+                if (!json.has("hide")) {
+                    responseHandler.onAddText(text);
+                }
             }
             if (json.has("wakeup")) {
-                responseHandler.onWakeup();
-            } else {
-                responseHandler.onUnwakeup();
+                if (json.getString("wakeup").equals("1")) {
+                    responseHandler.onWakeup();
+                } else {
+                    responseHandler.onUnwakeup();
+                }
             }
             if (json.has("vibrate")) {
                 responseHandler.onVibrate();

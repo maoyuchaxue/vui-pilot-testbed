@@ -48,8 +48,6 @@ public class NetRawAudioDataHandler implements RawAudioDataHandler {
             outputStream.close();
             conn.getInputStream();
 
-            Log.i("VUI", params);
-
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cannot access net server");
