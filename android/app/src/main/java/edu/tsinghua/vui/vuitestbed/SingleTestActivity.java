@@ -13,7 +13,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,6 +64,8 @@ public class SingleTestActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_single_test);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         Button endTestButton = (Button) findViewById(R.id.end_test_button);
         endTestButton.setOnClickListener(new View.OnClickListener() {
             @Override

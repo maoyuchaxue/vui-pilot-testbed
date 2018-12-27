@@ -11,13 +11,14 @@ router.get('/control', function(req, res, next) {
   console.log(req.query.cuid, req.query.start, req.query.end);
   if (req.query.start == 1) {
     message_queue.agent_to_user = [];
+    socket_server.notify_start(req.query.cuid);
     asr_service.start(req.query.cuid);
 
     log('start', 'control', req.query.cuid);
   }
   if (req.query.end == 1) {
     asr_service.stop();
-    
+    socket_server.notify_end();
     log('end', 'control', req.query.cuid);
   }
   res.send("").status(200);

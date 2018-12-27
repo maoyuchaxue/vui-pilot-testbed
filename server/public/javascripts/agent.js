@@ -5,6 +5,9 @@ var data = {
     reply: [],
     sections: [],
     scripts: [],
+    error_count: 0,
+    test_started: false,
+    cuid: "none",
     wakeup: false,
     wakeupButtonClass: "btn-info",
     unwakeupButtonClass: "btn-primary",
@@ -43,11 +46,24 @@ clear_msg = function() {
 }
 
 send_agent_msg = function(msg) {
-    data.msgs.push({text:msg.text, is_user:false});
+    if (msg.text.length == 0) {
+        data.msgs.push({text:"(语音停止)", is_user:false});    
+    } else {
+        data.msgs.push({text:msg.text, is_user:false});
+    }
     var ele = document.getElementById('msg-list');
     ele.scrollTop = ele.scrollHeight;
     socket.emit('agent_msg', msg);
     data.reply = [];
+}
+
+submit_error = function() {
+    if (!data.test_started) {
+        return ;
+    }
+
+    data.error_count += 1;
+    socket.emit('count_error', data.cuid, data.error_count);
 }
 
 add_agent_msg = function(content) {
@@ -81,6 +97,11 @@ remove_slice = function(slice_id) {
 }
 
 submit_reply = function() {
+
+    if (!data.test_started) {
+        return ;
+    }
+
     var res = {};
     var text = "";
     for (i in data.reply) {
@@ -123,6 +144,17 @@ choose_script = function(script) {
     socket.emit('set_script', script);
 }
 
+receive_test_start = function(cuid) {
+    data.test_started = true;
+    data.msgs = [];
+    data.error_count = 0;
+    data.cuid = cuid;
+}
+
+receive_test_end = function() {
+    data.test_started = false;
+}
+
 agent = function() {
     var vm = new Vue({
         el: '#root',
@@ -132,15 +164,34 @@ agent = function() {
             addAgentMsg: add_agent_msg,
             removeSlice: remove_slice,
             submitReply: submit_reply,
+            submitError: submit_error,
             filterSlot: filter_slot,
             chooseSection: choose_section,
             chooseScript: choose_script,
             triggerWakeup: function() {
+                if (!data.test_started) {
+                    return ;
+                }
                 data.wakeup = !data.wakeup;
                 socket.emit('wakeup', data.wakeup);
             },
-            voiceWakeup: function() { socket.emit('voice-wakeup'); },
-            vibrateWakeup: function() { socket.emit('vibrate-wakeup'); }
+            voiceWakeup: function() { 
+                if (!data.test_started) {
+                    return ;
+                }
+                socket.emit('voice-wakeup');
+            },
+            vibrateWakeup: function() {
+                if (!data.test_started) {
+                    return ;
+                }
+                socket.emit('vibrate-wakeup');
+            }
+        },
+        computed: {
+            replyIsEmpty: function() {
+                return this.reply.length == 0;
+            }
         }
     })
     
@@ -150,5 +201,7 @@ agent = function() {
     socket.on('options', receive_options);
     socket.on('sections', receive_sections);
     socket.on('scripts', receive_scripts);
+    socket.on('start', receive_test_start);
+    socket.on('end', receive_test_end);
 }
 

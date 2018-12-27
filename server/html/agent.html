@@ -10,7 +10,11 @@
     <body>
         <div id="root">
             <div id="msg-box" class="flex-with-title">
-                <span id="msg-title" class="flex-title">历史记录</span>
+                <div id="msg-title" class="flex-title">
+                    <span id="msg-title-span">实验记录</span>
+                    <span id="test-info-span" v-if="test_started">实验进行中, 当前实验组id：{{ cuid }}，总计错误次数：{{ error_count }}次</span>
+                    <span id="test-info-span" v-else>实验未开始</span>
+                </div>
                 <div id="msg-list" class="flex-remains">
                     <div v-for="msg in msgs" class="message">
                         {{msg.is_user ? "用户" : "WIZARD"}} : {{msg.text}}
@@ -47,12 +51,12 @@
                         <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="voiceWakeup()">
                             <span id="wakeup-span-voice" class="fui-volume wakeup-button-fui">唤醒（语音问候）</span>
                         </div>
-                        <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="vibrateWakeup()">
-                            <span id="wakeup-span-voice" class="fui-alert-circle wakeup-button-fui">唤醒（手机震动）</span>
+                        <div id="wakeup-button-with-vibrate" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="vibrateWakeup()">
+                            <span id="wakeup-span-vibrate" class="fui-alert-circle wakeup-button-fui">唤醒（手机震动）</span>
                         </div>
                     </div>
                     <div id="reply-area">
-                        <div v-for="(slice, slice_id) in reply" class="btn reply-slice">
+                        <div v-for="(slice, slice_id) in reply" class="btn reply-slice"  v-on:click="removeSlice(slice_id)">
                             <template v-for="span in slice.spans" class="span">
                                 <div v-if="span.isSlot" class="reply-slot">
                                     <input type="text" class="form-control slot-input" v-bind:placeholder="span.hint" v-model="span.text">
@@ -62,11 +66,15 @@
                                     {{span.text}}
                                 </span>
                             </template>
-                            <span v-on:click="removeSlice(slice_id)" class="fui-cross remove-slice-button"></span>
                         </div>
                     </div>
-                    <div id="reply-button" class="btn btn-primary" v-on:click="submitReply()">
-                        <span id="reply-button-fui" class="fui-upload">回复文本</span>
+                    <div id="reply-buttons">                    
+                        <div id="error-button" class="btn btn-info" v-on:click="submitError()">
+                            <span id="error-button-fui" class="fui-alert-circle">发生错误</span>
+                        </div>
+                        <div id="reply-button" class="btn btn-primary" v-on:click="submitReply()">
+                            <span id="reply-button-fui" class="fui-upload">{{ replyIsEmpty? '停止发音' : '回复文本' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

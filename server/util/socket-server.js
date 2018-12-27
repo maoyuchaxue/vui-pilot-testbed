@@ -1,5 +1,6 @@
 
 var message_queue = require('./message-queue');
+var log = require('./logger');
 var fs = require('fs');
 var path = require('path');
 
@@ -23,13 +24,11 @@ module.exports = {
     socket: function(socket) {
         module_socket = socket;
         socket.on('agent_msg', function(msg) {
-            console.log("agent_msg: " + msg);
             message_queue.agent_to_user.push(msg);
             // socket.emit('user_msg', text);
         });
         socket.on('wakeup', function(new_wakeup) {
             wakeup = new_wakeup;
-            console.log("wakeup " + new_wakeup);
         });
         socket.on('set_script', function(script) {
             cur_script = scripts[script];
@@ -46,6 +45,9 @@ module.exports = {
         socket.on('vibrate-wakeup', function() {
             message_queue.agent_to_user.push({vibrate: true});
         })
+        socket.on('count_error', function(cuid, error_count) {
+            log(error_count, 'error', cuid);
+        })
         socket.emit('scripts', summary);
         socket.emit('sections', sections);
         socket.emit('options', cur_script[sections[0].name]);
@@ -61,5 +63,11 @@ module.exports = {
     },
     is_wakeup: function() {
         return wakeup;
+    },
+    notify_start: function(cuid) {
+        module_socket.emit('start', cuid);
+    },
+    notify_end: function() {
+        module_socket.emit('end');
     }
 }
