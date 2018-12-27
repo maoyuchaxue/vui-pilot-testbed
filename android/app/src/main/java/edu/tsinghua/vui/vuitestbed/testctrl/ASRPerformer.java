@@ -19,11 +19,6 @@ public class ASRPerformer {
         capturer.start();
         try {
             while (!stopped) {
-                try {
-                    Thread.sleep(AudioCapturer.packageDurationInMs);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 byte[] bytes = capturer.read();
 
                 if (bytes == null) {
