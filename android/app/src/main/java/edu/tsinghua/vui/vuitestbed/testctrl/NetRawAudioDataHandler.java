@@ -5,6 +5,7 @@ import android.util.Log;
 
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
 import edu.tsinghua.vui.vuitestbed.util.ConnUtil;
+import edu.tsinghua.vui.vuitestbed.util.MessageQueue;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ import java.net.URL;
 public class NetRawAudioDataHandler implements RawAudioDataHandler {
 
     private PlaybackManager playbackManager;
+    private MessageQueue UIToAgentMessageQueue;
     private String localNetURL;
     private String cuid;
 
-    public NetRawAudioDataHandler(PlaybackManager playbackManager, String cuid) {
+    public NetRawAudioDataHandler(PlaybackManager playbackManager, MessageQueue UIToAgentMessageQueue, String cuid) {
         this.playbackManager = playbackManager;
+        this.UIToAgentMessageQueue = UIToAgentMessageQueue;
         this.cuid = cuid;
         this.localNetURL = NetConfig.getNetUrl() +  "/raw";
     }
@@ -35,6 +38,11 @@ public class NetRawAudioDataHandler implements RawAudioDataHandler {
 
         String params = "cuid=" + cuid;
         params += "&payload=" + payload;
+
+        String message = UIToAgentMessageQueue.getMessage();
+        if (message != null) {
+            params += "&msg=" + ConnUtil.urlEncode(message);
+        }
 
         HttpURLConnection conn = null;
         try {

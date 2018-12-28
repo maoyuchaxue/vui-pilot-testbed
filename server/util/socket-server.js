@@ -25,7 +25,6 @@ module.exports = {
         module_socket = socket;
         socket.on('agent_msg', function(msg) {
             message_queue.agent_to_user.push(msg);
-            // socket.emit('user_msg', text);
         });
         socket.on('wakeup', function(new_wakeup) {
             wakeup = new_wakeup;
@@ -53,13 +52,14 @@ module.exports = {
         socket.emit('options', cur_script[sections[0].name]);
     },
     send: function(text) {
-        module_socket.emit('user_msg', text);
+        module_socket.emit('user-msg', text);
     },
     set_options: function(options) {
         module_socket.emit('options', options);
     },
     set_wakeup: function(new_wakeup) {
         wakeup = new_wakeup;
+        module_socket.emit('set-wakeup', wakeup);
     },
     is_wakeup: function() {
         return wakeup;

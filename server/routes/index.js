@@ -28,6 +28,14 @@ router.post('/raw', function(req, res, next) {
   let buff = new Buffer.from(req.body.payload, 'base64');
   log(req.body.payload, 'raw', req.body.cuid, 'debug');
 
+  if (req.body.msg) {
+    log(req.body.msg, 'msg', req.body.cuid, 'debug');
+    if (req.body.msg == "wakeup") {
+      socket_server.send("（按下唤醒按钮）");
+      socket_server.set_wakeup(true);
+    }
+  }
+
   asr_service.sendBytes([...buff]);
   res.send("").status(200);
 })

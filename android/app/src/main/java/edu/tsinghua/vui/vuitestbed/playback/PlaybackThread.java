@@ -1,14 +1,16 @@
 package edu.tsinghua.vui.vuitestbed.playback;
 
+import edu.tsinghua.vui.vuitestbed.util.MessageQueue;
+
 public class PlaybackThread implements Runnable {
 
     private final static int mills = 20;
 
     private PlaybackHandler playbackHandler;
-    private PlaybackMessageQueue messageQueue;
+    private MessageQueue messageQueue;
     private String cuid;
 
-    public PlaybackThread(PlaybackHandler playbackHandler, PlaybackMessageQueue messageQueue, String cuid) {
+    public PlaybackThread(PlaybackHandler playbackHandler, MessageQueue messageQueue, String cuid) {
         this.playbackHandler = playbackHandler;
         this.messageQueue = messageQueue;
         this.cuid = cuid;

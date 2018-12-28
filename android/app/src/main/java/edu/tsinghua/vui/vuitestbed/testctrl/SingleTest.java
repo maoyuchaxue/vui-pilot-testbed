@@ -8,6 +8,7 @@ import edu.tsinghua.vui.vuitestbed.playback.MultiModalResponseHandler;
 import edu.tsinghua.vui.vuitestbed.playback.NetPlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackFetcher;
 import edu.tsinghua.vui.vuitestbed.playback.PlaybackManager;
+import edu.tsinghua.vui.vuitestbed.util.MessageQueue;
 
 import java.util.Properties;
 
@@ -19,6 +20,7 @@ public class SingleTest implements Runnable {
     private Handler messageToUIHandler;
     private Properties properties;
     private String cuid;
+    private MessageQueue messageQueue;
 
     public SingleTest(MultiModalResponseHandler responseHandler, Handler messageToUIHandler, Properties properties, String cuid) {
         this.responseHandler = responseHandler;
@@ -34,12 +36,13 @@ public class SingleTest implements Runnable {
     private ASRPerformer performer;
 
     public void run() {
+        messageQueue = new MessageQueue();
         notifier = new NetServerNotifier(cuid);
         notifier.notifyStart();
         PlaybackManager playbackManager = new PlaybackManager(responseHandler, messageToUIHandler, properties, cuid);
         PlaybackFetcher playbackFetcher = new NetPlaybackFetcher(playbackManager, cuid);
 
-        RawAudioDataHandler rawAudioDataHandler = new NetRawAudioDataHandler(playbackManager, cuid);
+        RawAudioDataHandler rawAudioDataHandler = new NetRawAudioDataHandler(playbackManager, messageQueue, cuid);
         playbackManager.start();
 
         performer = new ASRPerformer(playbackFetcher, rawAudioDataHandler);
@@ -52,4 +55,7 @@ public class SingleTest implements Runnable {
         performer.stop();
     }
 
+    public void addMessage(String msg){
+        messageQueue.addMessage(msg);
+    }
 }

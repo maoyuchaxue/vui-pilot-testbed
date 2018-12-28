@@ -1,15 +1,15 @@
-package edu.tsinghua.vui.vuitestbed.playback;
+package edu.tsinghua.vui.vuitestbed.util;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class PlaybackMessageQueue {
+public class MessageQueue {
     // currently nothing more than a Concurrent Queue
 
     private ConcurrentLinkedQueue<String> list;
     private boolean stopped;
     
-    public PlaybackMessageQueue() {
-        list = new ConcurrentLinkedQueue<String>();
+    public MessageQueue() {
+        list = new ConcurrentLinkedQueue<>();
         stopped = false;
     }
 
@@ -25,11 +25,15 @@ public class PlaybackMessageQueue {
         return list.isEmpty();
     }
 
-    public synchronized void stop() {
-        this.stopped = true;
+    public void stop() {
+        synchronized (this) {
+            this.stopped = true;
+        }
     }
 
     public synchronized boolean stopped() {
-        return this.stopped;
+        synchronized (this) {
+            return this.stopped;
+        }
     }
 }

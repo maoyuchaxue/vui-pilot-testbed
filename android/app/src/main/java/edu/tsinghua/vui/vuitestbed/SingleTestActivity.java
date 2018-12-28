@@ -18,7 +18,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -37,6 +41,7 @@ public class SingleTestActivity extends AppCompatActivity {
     private boolean hasGraphFeedback;
     private String cuid;
     private ImageView wakeupImage;
+    private ProgressBar wakeupSpinKit;
     private ImageView responseImageView;
     private TextView responseTextView;
     private Vibrator vibrator;
@@ -66,7 +71,7 @@ public class SingleTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_single_test);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Button endTestButton = (Button) findViewById(R.id.end_test_button);
+        Button endTestButton = findViewById(R.id.end_test_button);
         endTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +80,17 @@ public class SingleTestActivity extends AppCompatActivity {
             }
         });
         wakeupImage = findViewById(R.id.wakeup_imageview);
+        wakeupSpinKit = findViewById(R.id.wakeup_spin_kit);
+        Sprite wave = new Wave();
+        wakeupSpinKit.setIndeterminateDrawable(wave);
+
+        wakeupImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test.addMessage("wakeup");
+            }
+        });
+
         responseImageView = findViewById(R.id.response_imageview);
         responseTextView = findViewById(R.id.response_textview);
         clear();
@@ -128,11 +144,13 @@ public class SingleTestActivity extends AppCompatActivity {
     }
 
     public void setWakeup() {
-        wakeupImage.setVisibility(View.VISIBLE);
+        wakeupImage.setVisibility(View.GONE);
+        wakeupSpinKit.setVisibility(View.VISIBLE);
     }
 
     public void setUnwakeup() {
-        wakeupImage.setVisibility(View.INVISIBLE);
+        wakeupImage.setVisibility(View.VISIBLE);
+        wakeupSpinKit.setVisibility(View.GONE);
     }
 
     public void addText(String text) {
@@ -156,7 +174,9 @@ public class SingleTestActivity extends AppCompatActivity {
     public void clear() {
         responseTextView.setText("");
         responseTextView.setVisibility(View.GONE);
-        responseImageView.setVisibility(View.GONE);
-        wakeupImage.setVisibility(View.INVISIBLE);
+        responseImageView.setVisibility(View.VISIBLE);
+
+        wakeupImage.setVisibility(View.VISIBLE);
+        wakeupSpinKit.setVisibility(View.GONE);
     }
 }

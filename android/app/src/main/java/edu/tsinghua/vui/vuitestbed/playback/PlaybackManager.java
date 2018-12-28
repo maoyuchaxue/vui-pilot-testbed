@@ -2,16 +2,16 @@ package edu.tsinghua.vui.vuitestbed.playback;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.util.Properties;
 
+import edu.tsinghua.vui.vuitestbed.util.MessageQueue;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
 
 public class PlaybackManager {
-    private PlaybackMessageQueue messageQueue;
+    private MessageQueue messageQueue;
     private Thread handlerThread;
     private PlaybackHandler handler;
     private MultiModalResponseHandler responseHandler;
@@ -21,7 +21,7 @@ public class PlaybackManager {
         String appKey = properties.getProperty("app.appKey");
         String secretKey = properties.getProperty("app.appSecret");
         handler = new TTSPlaybackHandler(appKey, secretKey);
-        messageQueue = new PlaybackMessageQueue();
+        messageQueue = new MessageQueue();
         handlerThread = new Thread(new PlaybackThread(handler, messageQueue, cuid));
         this.responseHandler = responseHandler;
         this.messageToUIHandler = messageToUIHandler;

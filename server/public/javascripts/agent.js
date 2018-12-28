@@ -196,12 +196,15 @@ agent = function() {
     })
     
     socket = io();
-    socket.on('user_msg', receive_user_msg);
+    socket.on('user-msg', receive_user_msg);
     socket.on('disconnect', disconnect_from_server);
     socket.on('options', receive_options);
     socket.on('sections', receive_sections);
     socket.on('scripts', receive_scripts);
     socket.on('start', receive_test_start);
     socket.on('end', receive_test_end);
+    socket.on('set-wakeup', function(wakeup) {
+        data.wakeup = wakeup;
+    })
 }
 
