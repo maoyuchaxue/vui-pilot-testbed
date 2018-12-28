@@ -19,6 +19,9 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... urls) {
         String url = urls[0];
         Bitmap res = null;
+        if (url.length() == 0) {
+            return null;
+        }
         try {
             res = ImageCacheMap.get(url);
             if (res == null) {
@@ -34,7 +37,9 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap result) {
-        imageView.setImageBitmap(result);
-        imageView.setVisibility(View.VISIBLE);
+        if (result != null) {
+            imageView.setImageBitmap(result);
+            imageView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -29,16 +29,26 @@ npm start
 
 ## todolist:
 
-+ Android端移植
-+ 添加用户端的图形界面
-+ 添加由GUI管理的测试流程控制
-    + server端的测试组控制
-    + WOz端的流程展示
-+ 添加GUI直接反馈（唤醒反馈）
-    + 唤醒的WOz
-+ 添加log
-    + 用户端
-    + server端
-+ agent端的rasa实现
-+ WOz端的section设置
-+ 交谈脚本的展示
+- [x] Android端移植
+- [x] 添加用户端的图形界面
+- [x] 添加由GUI管理的测试流程控制
+    - [x] server端的测试组控制
+    - [x] WOz端的流程展示
+- [x] 添加GUI直接反馈（唤醒反馈）
+    - [x] 唤醒的WOz
+- [x] 添加log
+    - [] 用户端
+    - [x] server端
+- [] agent端的rasa实现
+- [x] WOz端的section设置
+- [x] 交谈脚本的展示
+
+## 平台trivial bug/feature list:
+
+- [x] 退出+切换模态无法成功
+- [x] WOz的界面显示易用性不佳，操作缓慢
+- [x] 录音结果不正确
+- [] 脚本需要更新
+- [x] 可以添加错误反馈+记录
+- [x] 停止语音
+- [x] 保持唤醒
