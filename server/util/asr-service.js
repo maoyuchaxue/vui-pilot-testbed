@@ -15,14 +15,20 @@ var asrService = java.newInstanceSync("com.baidu.aip.demotest.ASRService")
 
 module.exports = {
     start: function(cuid) {
+        console.log("start: begin");
         java.callMethodSync(asrService, "start", cuid);
+        console.log("start: end");
     },
     stop: function() {
+        console.log("stop: begin");
         java.callMethodSync(asrService, "stop");
+        console.log("stop: end");
     },
     sendBytes: function(data) {
+        console.log("sendByte: begin");
         java.callMethodSync(asrService, "sendBytes", java.newArray(
             "byte", data.map(function(c) { return java.newByte(c) })
         ));
+        console.log("sendByte: end");
     }
 }
