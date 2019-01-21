@@ -1,14 +1,17 @@
 var fs = require('fs');
 var java = require('java');
-var baseDir = "../libs/runtime-libs";
-var dependencies = fs.readdirSync(baseDir);
+var path = require('path');
+var baseDir = path.join(__dirname, '..', '..');
+var dependencies = fs.readdirSync(path.join(baseDir, 'libs', 'runtime-libs'));
+
+java.classpath.push(path.join(baseDir, 'libs', 'ht-java-talker-0.3.2-out.jar'));
+java.classpath.push(path.join(baseDir, 'build', 'classes', 'main'));
 
 dependencies.forEach(function(dependency) {
-    java.classpath.push(baseDir + "/" + dependency);
+    java.classpath.push(path.join(baseDir, 'libs', 'runtime-libs', dependency));
 })
 
-java.classpath.push('../libs/ht-java-talker-0.3.2-out.jar');
-java.classpath.push('../bin');
+console.log(java.classpath);
 java.options.push("-Djava.library.path=../libs");
 
 var asrService = java.newInstanceSync("com.baidu.aip.demotest.ASRService")
