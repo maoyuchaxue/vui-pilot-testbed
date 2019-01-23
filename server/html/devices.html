@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>VUI devices manager</title>
+        <meta charset="gbk"/>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+        <link href="/lib/css/vendor/bootstrap.min.css" rel="stylesheet">
+        <link href="/lib/css/flat-ui.css" rel="stylesheet">    
+        <link rel="stylesheet" href="/stylesheets/devices.css"/>
+    </head>
+    <body>
+        <div id="root">
+            <div v-for="(idev, idev_id) in input_devices">
+                <div>{{ idev.name }}</div>
+                <div v-for="(triggered, odev_id) in idev.triggers">
+                    <span id="span" class="btn btn-lg btn-info" v-if="triggered">{{ output_devices[odev_id].name }}</span>
+                    <span id="wakeup-span" class="btn btn-lg btn-info disabled" v-else>{{ output_devices[odev_id].name }}</span>
+                </div>
+            </div>
+            <div id="submit-button" class="btn btn-lg btn-primary">保存</div>
+        </div>
+        <script src="/lib/scripts/jquery-3.3.1.min.js"></script>
+        <script src="/lib/scripts/popper.min.js"></script>
+        <script src="/lib/scripts/flat-ui.js"></script>
+        <script src="/javascripts/socket.io.js"></script>
+        <script src="/javascripts/devices.js"></script>
+        <script>
+            devices();
+        </script>
+    </body>
+</html>

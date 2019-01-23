@@ -20,6 +20,8 @@ var sections = cur_script["sections"];
 var module_socket = null;
 var wakeup = false;
 
+var cur_cuid = null;
+
 module.exports = {
     socket: function(socket) {
         module_socket = socket;
@@ -50,6 +52,10 @@ module.exports = {
         socket.emit('scripts', summary);
         socket.emit('sections', sections);
         socket.emit('options', cur_script[sections[0].name]);
+
+        if (cur_cuid != null) {
+            socket.emit('start', cuid);
+        }
     },
     send: function(text) {
         module_socket.emit('user-msg', text);
@@ -65,9 +71,11 @@ module.exports = {
         return wakeup;
     },
     notify_start: function(cuid) {
+        cur_cuid = cuid;
         module_socket.emit('start', cuid);
     },
     notify_end: function() {
+        cur_cuid = null;
         module_socket.emit('end');
     }
 }

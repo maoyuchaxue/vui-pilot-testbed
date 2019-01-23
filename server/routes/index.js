@@ -4,8 +4,11 @@ var router = express.Router();
 
 var message_queue = require('../util/message-queue');
 var socket_server = require('../util/socket-server');
+var device_manager = require('../util/device-manager');
 var asr_service = require('../util/asr-service');
 var log = require('../util/logger');
+
+device_manager.init(socket_server);
 
 router.get('/control', function(req, res, next) {
   console.log(req.query.cuid, req.query.start, req.query.end);
@@ -68,6 +71,19 @@ router.get('/user_fetch', function(req, res, next) {
 
 router.get('/agent', function(req, res, next) {
   res.sendFile(path.join(__dirname, "../html/agent.html"));
+});
+
+router.get('/devices', function(req, res, next) {
+  res.sendFile(path.join(__dirname, "../html/devices.html"));
+});
+
+router.get('/get_devices', function(req, res, next) {
+  res.send(JSON.stringify(device_manager.get_devices()));
+});
+
+router.post('/set_trigger', function(req, res, next) {
+  trigger = JSON.parse(req.body.payload);
+  device_manager.set_triggers(trigger);
 });
 
 module.exports = router;
