@@ -9,14 +9,30 @@
     </head>
     <body>
         <div id="root">
-            <div v-for="(idev, idev_id) in input_devices">
-                <div>{{ idev.name }}</div>
-                <div v-for="(triggered, odev_id) in idev.triggers">
-                    <span id="span" class="btn btn-lg btn-info" v-if="triggered">{{ output_devices[odev_id].name }}</span>
-                    <span id="wakeup-span" class="btn btn-lg btn-info disabled" v-else>{{ output_devices[odev_id].name }}</span>
+            <div class="device-line">
+                <div>在线输入设备：</div>
+                <div v-if="input_devices.length > 0">
+                    <div v-for="(idev, idev_id) in input_devices" v-if="idev.online">{{ idev.name }}</div>
                 </div>
+                <div v-else>无</div>
             </div>
-            <div id="submit-button" class="btn btn-lg btn-primary">保存</div>
+            <div class="device-line">
+                <div>在线输出设备：</div>
+                <div v-if="output_devices.length > 0">
+                    <div v-for="(odev, odev_id) in output_devices" v-if="odev.online">{{ odev.name }}</div>
+                </div>
+                <div v-else>无</div>
+            </div>
+            <table id="trigger-table">
+                <tr v-for="(idev, idev_id) in input_devices">
+                    <th>{{ idev.name }}</th>
+                    <th v-for="(triggering, odev_id) in idev.triggers">
+                        <span class="wakeup-span btn btn-lg btn-info" v-if="triggering" v-on:click="setTrigger(idev_id, odev_id, false)">{{ output_devices[odev_id].name }}</span>
+                        <span class="wakeup-span btn btn-lg btn-info not-triggering" v-else v-on:click="setTrigger(idev_id, odev_id, true)">{{ output_devices[odev_id].name }}</span>
+                    </th>
+                </tr>
+            </table>
+            <div id="submit-button" class="btn btn-lg btn-primary" v-on:click="submitModification()">保存修改</div>
         </div>
         <script src="/lib/scripts/jquery-3.3.1.min.js"></script>
         <script src="/lib/scripts/popper.min.js"></script>

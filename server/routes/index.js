@@ -82,7 +82,8 @@ router.get('/get_devices', function(req, res, next) {
 });
 
 router.post('/set_trigger', function(req, res, next) {
-  trigger = JSON.parse(req.body.payload);
+  console.log(req.body.triggers);
+  trigger = JSON.parse(req.body.triggers);
   device_manager.set_triggers(trigger);
 });
 

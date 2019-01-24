@@ -4,11 +4,17 @@ var data = {
 }
 
 function set_trigger(idev, odev, trigger) {
-    input_devices[idev].triggers[odev] = trigger;
+    data.input_devices[idev].triggers[odev] = trigger;
 }
 
 function submit() {
-    // TODO: post modification to set_trigger
+    res = {};
+    for (var idev_id in data.input_devices) {
+        res[idev_id] = data.input_devices[idev_id].triggers;
+    }
+    res_str = JSON.stringify(res);
+    console.log(res_str);
+    $.post("./set_trigger", "triggers=" + res_str);
 }
 
 devices = function() {
