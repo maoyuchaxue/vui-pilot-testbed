@@ -169,23 +169,23 @@ agent = function() {
             chooseSection: choose_section,
             chooseScript: choose_script,
             triggerWakeup: function() {
-                if (!data.test_started) {
-                    return ;
-                }
+                // if (!data.test_started) {
+                //     return ;
+                // }
                 data.wakeup = !data.wakeup;
                 socket.emit('wakeup', data.wakeup);
-            },
-            voiceWakeup: function() { 
-                if (!data.test_started) {
-                    return ;
-                }
-                socket.emit('voice-wakeup');
-            },
-            vibrateWakeup: function() {
-                if (!data.test_started) {
-                    return ;
-                }
-                socket.emit('vibrate-wakeup');
+            // },
+            // voiceWakeup: function() { 
+            //     if (!data.test_started) {
+            //         return ;
+            //     }
+            //     socket.emit('voice-wakeup');
+            // },
+            // vibrateWakeup: function() {
+            //     if (!data.test_started) {
+            //         return ;
+            //     }
+            //     socket.emit('vibrate-wakeup');
             }
         },
         computed: {

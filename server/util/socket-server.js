@@ -1,5 +1,8 @@
 
 var message_queue = require('./message-queue');
+var device_manager = require('./device-manager');
+var woz_device = require('../devices/woz-device');
+
 var log = require('./logger');
 var fs = require('fs');
 var path = require('path');
@@ -30,6 +33,11 @@ module.exports = {
         });
         socket.on('wakeup', function(new_wakeup) {
             wakeup = new_wakeup;
+            if (!new_wakeup) {
+                device_manager.unwakeup_output_devices()
+            } else {
+                woz_device.wakeup();
+            }
         });
         socket.on('set_script', function(script) {
             cur_script = scripts[script];
@@ -40,12 +48,12 @@ module.exports = {
         socket.on('set_section', function(section) {
             socket.emit('options', cur_script[section]);
         });
-        socket.on('voice-wakeup', function() {
-            message_queue.agent_to_user.push({text: "在", hide:'1'});
-        });
-        socket.on('vibrate-wakeup', function() {
-            message_queue.agent_to_user.push({vibrate: true});
-        })
+        // socket.on('voice-wakeup', function() {
+        //     message_queue.agent_to_user.push({text: "在", hide:'1'});
+        // });
+        // socket.on('vibrate-wakeup', function() {
+        //     message_queue.agent_to_user.push({vibrate: true});
+        // })
         socket.on('count_error', function(cuid, error_count) {
             log(error_count, 'error', cuid);
         })
@@ -56,6 +64,7 @@ module.exports = {
         if (cur_cuid != null) {
             socket.emit('start', cuid);
         }
+        socket.emit('set-wakeup', wakeup);
     },
     send: function(text) {
         module_socket.emit('user-msg', text);

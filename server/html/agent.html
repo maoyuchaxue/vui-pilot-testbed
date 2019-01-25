@@ -45,15 +45,15 @@
                 <div id="reply-inner-box">
                     <div id="wakeup-buttons">                    
                         <div id="wakeup-button" v-bind:class="[wakeup ? wakeupButtonClass : unwakeupButtonClass, buttonClass]" v-on:click="triggerWakeup()">
-                            <span id="unwakeup-span" class="fui-eye" v-if="wakeup">取消（图标变灰）</span>
-                            <span id="wakeup-span" class="fui-eye wakeup-button-fui" v-else>唤醒（图标高亮）</span>
+                            <span id="unwakeup-span" class="fui-eye" v-if="wakeup">取消</span>
+                            <span id="wakeup-span" class="fui-eye wakeup-button-fui" v-else>唤醒</span>
                         </div>
-                        <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="voiceWakeup()">
+                        <!-- <div id="wakeup-button-with-voice" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="voiceWakeup()">
                             <span id="wakeup-span-voice" class="fui-volume wakeup-button-fui">唤醒（语音问候）</span>
                         </div>
                         <div id="wakeup-button-with-vibrate" v-bind:class="[unwakeupButtonClass, buttonClass]" v-on:click="vibrateWakeup()">
                             <span id="wakeup-span-vibrate" class="fui-alert-circle wakeup-button-fui">唤醒（手机震动）</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div id="reply-area">
                         <div v-for="(slice, slice_id) in reply" class="btn reply-slice"  v-on:click="removeSlice(slice_id)">
