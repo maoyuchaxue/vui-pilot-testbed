@@ -11,14 +11,14 @@
         <div id="root">
             <div class="device-line">
                 <div>在线输入设备：</div>
-                <div v-if="input_devices.length > 0">
+                <div v-if="has_online_idevs">
                     <div v-for="(idev, idev_id) in input_devices" v-if="idev.online">{{ idev.name }}</div>
                 </div>
                 <div v-else>无</div>
             </div>
             <div class="device-line">
                 <div>在线输出设备：</div>
-                <div v-if="output_devices.length > 0">
+                <div v-if="has_online_odevs">
                     <div v-for="(odev, odev_id) in output_devices" v-if="odev.online">{{ odev.name }}</div>
                 </div>
                 <div v-else>无</div>

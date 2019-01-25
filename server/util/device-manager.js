@@ -77,17 +77,21 @@ function set_triggers(triggers) {
 function trigger_output_devices(input_dev_name) {
     var dev = input_device_lists[input_dev_name];
     if (dev == null) return;
-    var triggered_devices = []
+    var triggered_devices = [];
     for (var i in dev.triggers) {
-        var output_device = output_device_lists[dev.triggers[i]]
-        if (output_device.online) {
-            output_device.socket.write("1");
-            triggered_devices.push(output_device.name);
+        if (dev.triggers[i]) {
+            var output_device = output_device_lists[i];
+            if (output_device.online) {
+                output_device.socket.write("1");
+                triggered_devices.push(output_device.name);
+            }
         }
     }
     if (module_agent_socket != null) {
         agent_feedback_msg = triggered_devices.length ? 
             "进行唤醒,触发了 " + triggered_devices.join(",") : "进行唤醒,但未设置反馈";
+
+        console.log("agent feedback msg:" + agent_feedback_msg);
         module_agent_socket.send(agent_feedback_msg);
     }
 }
@@ -115,13 +119,14 @@ function init(agent_socket) {
         socket.dev = null;
     
         socket.on('data', (data) => {
+            console.log('device input:' + data.length + " " + data);
             if (socket.dev == null) {
                 socket.dev = data;
                 if (input_device_lists[socket.dev] != null) {
                     input_device_lists[socket.dev].online = true;
                 }
             }
-            if (data === '1') {
+            if (data == "1") {
                 trigger_output_devices(socket.dev);
             }
         });
@@ -131,6 +136,13 @@ function init(agent_socket) {
                 input_device_lists[socket.dev].online = false;
             }
             console.log('input device disconnected');
+        });
+
+        socket.on('error', () => {
+            if (input_device_lists[socket.dev] != null) {
+                input_device_lists[socket.dev].online = false;
+            }
+            console.log('input device failed');
         });
     });
 
@@ -142,6 +154,7 @@ function init(agent_socket) {
         socket.dev = null;
     
         socket.on('data', (data) => {
+            console.log('device input:' + data);
             if (socket.dev == null) {
                 socket.dev = data;
                 if (output_device_lists[socket.dev] != null) {
@@ -156,6 +169,13 @@ function init(agent_socket) {
                 output_device_lists[socket.dev].online = false;
             }
             console.log('output device disconnected');
+        });
+
+        socket.on('error', () => {
+            if (output_device_lists[socket.dev] != null) {
+                output_device_lists[socket.dev].online = false;
+            }
+            console.log('output device failed');
         });
     });
     

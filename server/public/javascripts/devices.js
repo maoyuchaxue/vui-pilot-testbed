@@ -21,6 +21,24 @@ devices = function() {
     var vm = new Vue({
         el: '#root',
         data: data,
+        computed: {
+            has_online_idevs: function() {
+                for (var idev_id in this.input_devices) {
+                    if (this.input_devices[idev_id].online) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            has_online_odevs: function() {
+                for (var odev_id in this.output_devices) {
+                    if (this.output_devices[odev_id].online) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        },
         methods: {
             setTrigger: set_trigger,
             submitModification: submit
