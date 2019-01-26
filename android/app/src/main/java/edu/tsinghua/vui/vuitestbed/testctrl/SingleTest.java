@@ -22,9 +22,10 @@ public class SingleTest implements Runnable {
     private String cuid;
     private MessageQueue messageQueue;
 
-    public SingleTest(MultiModalResponseHandler responseHandler, Handler messageToUIHandler, Properties properties, String cuid) {
+    public SingleTest(MultiModalResponseHandler responseHandler, Handler messageToUIHandler, MessageQueue messageQueue, Properties properties, String cuid) {
         this.responseHandler = responseHandler;
         this.messageToUIHandler = messageToUIHandler;
+        this.messageQueue = messageQueue;
         this.properties = properties;
         this.cuid = cuid;
     }
@@ -36,7 +37,6 @@ public class SingleTest implements Runnable {
     private ASRPerformer performer;
 
     public void run() {
-        messageQueue = new MessageQueue();
         notifier = new NetServerNotifier(cuid);
         notifier.notifyStart();
         PlaybackManager playbackManager = new PlaybackManager(responseHandler, messageToUIHandler, properties, cuid);

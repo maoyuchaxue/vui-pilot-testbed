@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button startButton = (Button) findViewById(R.id.start_button);
         final RadioGroup modalsRadioGroup = (RadioGroup) findViewById(R.id.modals_radio_group);
         final EditText testIdTextView = (EditText) findViewById(R.id.test_id_textview);
-        final EditText serverURLTextView = (EditText) findViewById(R.id.server_url_text);
+        final EditText serverIPTextView = (EditText) findViewById(R.id.server_url_text);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("has_text_feedback", hasTextFeedback);
                 intent.putExtra("has_graph_feedback", hasGraphFeedback);
                 intent.putExtra("test_id", testIdTextView.getText().toString());
-                intent.putExtra("server_url", serverURLTextView.getText().toString());
+                intent.putExtra("server_ip", serverIPTextView.getText().toString());
                 startActivityForResult(intent, 1);
             }
         });

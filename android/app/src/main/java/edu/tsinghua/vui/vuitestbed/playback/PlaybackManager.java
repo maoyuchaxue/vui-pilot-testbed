@@ -43,18 +43,6 @@ public class PlaybackManager {
                     responseHandler.onAddText(text);
                 }
             }
-            if (json.has("wakeup")) {
-                if (json.getString("wakeup").equals("1")) {
-                    responseHandler.onWakeup();
-                } else {
-                    responseHandler.onUnwakeup();
-                }
-            }
-            if (json.has("vibrate")) {
-                responseHandler.onVibrate();
-            } else {
-                responseHandler.onUnvibrate();
-            }
             if (json.has("img")) {
                 String graphURL = json.getString("img");
                 responseHandler.onAddGraph(NetConfig.getNetUrl() + graphURL);

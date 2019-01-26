@@ -8,7 +8,7 @@ public class MainTestor {
 
     public static void main(String[] args) throws Exception {
         Properties properties = getProperties();
-        SingleTest test = new SingleTest(null, null, properties, "default");
+        SingleTest test = new SingleTest(null, null, null, properties, "default");
         test.run();
     }
     

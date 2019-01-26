@@ -59,12 +59,6 @@ router.get('/user_fetch', function(req, res, next) {
     agent_res = {};
   }
 
-  if (socket_server.is_wakeup()) {
-    agent_res.wakeup = '1';
-  } else {
-    agent_res.wakeup = '0';
-  }
-
   log(JSON.stringify(agent_res), 'fetch', req.query.cuid);
   res.send(agent_res);
 });

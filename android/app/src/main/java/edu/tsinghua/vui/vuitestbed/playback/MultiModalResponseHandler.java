@@ -6,8 +6,6 @@ import edu.tsinghua.vui.vuitestbed.SingleTestActivity;
 
 public class MultiModalResponseHandler {
     private MultiModalConfig modalConfig;
-    private Boolean vibrate;
-    private Boolean wakeup;
     private Boolean updated;
     private String text;
     private String imageURL;
@@ -17,38 +15,9 @@ public class MultiModalResponseHandler {
     public MultiModalResponseHandler(SingleTestActivity activity, MultiModalConfig modalConfig) {
         this.activity = activity;
         this.modalConfig = modalConfig;
-        this.wakeup = false;
         this.updated = false;
         this.text = "";
         this.imageURL = "";
-    }
-
-    public void onWakeup() {
-        Log.i("VUI", "waked up!");
-        synchronized (this) {
-            if (wakeup == false) {
-                updated = true;
-            }
-            wakeup = true;
-        }
-    }
-
-    public void onUnwakeup() {
-        synchronized (this) {
-            if (wakeup == true) {
-                updated = true;
-            }
-            wakeup = false;
-        }
-    }
-
-    public void onVibrate() {
-        updated = true;
-        vibrate = true;
-    }
-
-    public void onUnvibrate() {
-        vibrate = false;
     }
 
     public void onAddText(String text) {
@@ -83,14 +52,6 @@ public class MultiModalResponseHandler {
                 activity.clear();
                 activity.addText(text);
                 activity.addGraph(imageURL);
-                if (wakeup) {
-                    activity.setWakeup();
-                } else {
-                    activity.setUnwakeup();
-                }
-                if (vibrate) {
-                    activity.vibrate();
-                }
             }
             updated = false;
         }

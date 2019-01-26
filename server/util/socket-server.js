@@ -62,7 +62,7 @@ module.exports = {
         socket.emit('options', cur_script[sections[0].name]);
 
         if (cur_cuid != null) {
-            socket.emit('start', cuid);
+            socket.emit('start', cur_cuid);
         }
         socket.emit('set-wakeup', wakeup);
     },

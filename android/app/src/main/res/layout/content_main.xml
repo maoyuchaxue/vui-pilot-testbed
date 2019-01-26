@@ -126,7 +126,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="300dp"
         android:layout_marginRight="300dp"
-        android:text="server URL"
+        android:text="server IP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/test_id_textview" />
@@ -142,7 +142,7 @@
         android:layout_marginRight="15dp"
         android:ems="10"
         android:inputType="text"
-        android:text="http://192.168.1.151:7575"
+        android:text="192.168.1.151"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />

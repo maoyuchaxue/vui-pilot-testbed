@@ -30,7 +30,9 @@ import java.util.Properties;
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalConfig;
 import edu.tsinghua.vui.vuitestbed.playback.MultiModalResponseHandler;
 import edu.tsinghua.vui.vuitestbed.testctrl.SingleTest;
+import edu.tsinghua.vui.vuitestbed.util.MessageQueue;
 import edu.tsinghua.vui.vuitestbed.util.NetConfig;
+import edu.tsinghua.vui.vuitestbed.wakeup.WakeupHandler;
 
 public class SingleTestActivity extends AppCompatActivity {
 
@@ -45,6 +47,7 @@ public class SingleTestActivity extends AppCompatActivity {
     private ImageView responseImageView;
     private TextView responseTextView;
     private Vibrator vibrator;
+    private WakeupHandler wakeupHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +61,8 @@ public class SingleTestActivity extends AppCompatActivity {
         MultiModalConfig modalConfig = new MultiModalConfig(hasVoiceFeedback, hasTextFeedback, hasGraphFeedback);
 
         cuid = intent.getStringExtra("test_id");
-        String serverURL = intent.getStringExtra("server_url");
-        NetConfig.setNetUrl(serverURL);
+        String serverIP = intent.getStringExtra("server_ip");
+        NetConfig.setServerIP(serverIP);
         ImageCacheMap.init();
 
         try {
@@ -87,7 +90,7 @@ public class SingleTestActivity extends AppCompatActivity {
         wakeupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                test.addMessage("wakeup");
+                wakeupHandler.screenWakeup();
             }
         });
 
@@ -104,10 +107,36 @@ public class SingleTestActivity extends AppCompatActivity {
             }
         };
 
-        test = new SingleTest(responseHandler, handler, properties, cuid);
+        MessageQueue messageQueue = new MessageQueue();
+        test = new SingleTest(responseHandler, handler, messageQueue, properties, cuid);
 
         Thread thread = new Thread(test);
         thread.start();
+
+        Handler handler1 = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case WakeupHandler.UNWAKEUP:
+                        setUnwakeup();
+                        break;
+                    case WakeupHandler.VISUAL_WAKEUP:
+                        setWakeup();
+                        break;
+                    case WakeupHandler.VIBRATE_WAKEUP:
+                        vibrate();
+                        break;
+                    case WakeupHandler.VOICE_WAKEUP:
+                        ((MessageQueue) msg.obj).addMessage("在");
+                        // TODO: test voice wakeup
+                        break;
+                }
+            }
+        };
+
+        wakeupHandler = new WakeupHandler(handler1, messageQueue);
+        Thread wakeupThread = new Thread(wakeupHandler);
+        wakeupThread.start();
     }
 
     private Properties getProperties() throws Exception {
