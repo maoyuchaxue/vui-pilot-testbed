@@ -1,0 +1,28 @@
+{
+    "sections": [
+        {
+            "name": "ask_weather",
+            "description": "询问天气"
+        },
+        {
+            "name": "ask_time",
+            "description": "询问时间"
+        }
+    ],
+
+    "ask_weather": [{
+            "name": "天气",
+            "text": "北京今天晴转多云，零下12度到零下2度。"
+        }, {
+            "name": "详细天气",
+            "text": "北京今天晴转多云，零下12度到零下2度，降温4度，东南风2级，空气质量优。"
+        }
+    ],
+    "ask_time": [
+        {
+            "name": "时间",
+            "text": "现在是_{time}_",
+            "img": "/images/time_icon.png"
+        }
+    ]
+}

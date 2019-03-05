@@ -58,7 +58,7 @@
                     <div id="reply-area">
                         <div v-for="(slice, slice_id) in reply" class="btn reply-slice"  v-on:click="removeSlice(slice_id)">
                             <template v-for="span in slice.spans" class="span">
-                                <div v-if="span.isSlot" class="reply-slot">
+                                <div v-if="span.isSlot" class="reply-slot" v-on:click.stop>
                                     <input type="text" class="form-control slot-input" v-bind:placeholder="span.hint" v-model="span.text">
                                     </input>
                                 </div>
