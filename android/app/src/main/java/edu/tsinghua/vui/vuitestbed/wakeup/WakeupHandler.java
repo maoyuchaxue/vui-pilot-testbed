@@ -41,7 +41,7 @@ public class WakeupHandler implements Runnable {
             screenSocket = new Socket(serverIP, iDevPort);
 
             while (!visualSocket.isConnected());
-            visualSocket.getOutputStream().write("screen".getBytes());
+            visualSocket.getOutputStream().write("big-screen".getBytes());
             visualSocket.getOutputStream().flush();
 
             while (!voiceSocket.isConnected());
@@ -53,7 +53,7 @@ public class WakeupHandler implements Runnable {
             vibrateSocket.getOutputStream().flush();
 
             while (!screenSocket.isConnected());
-            screenSocket.getOutputStream().write("screen".getBytes());
+            screenSocket.getOutputStream().write("big-screen".getBytes());
             screenSocket.getOutputStream().flush();
 
         } catch (Exception e) {

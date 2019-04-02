@@ -170,6 +170,7 @@
 }
 
 #msg-list {
+    max-height: 30%;
     overflow-y: scroll;
 }
 

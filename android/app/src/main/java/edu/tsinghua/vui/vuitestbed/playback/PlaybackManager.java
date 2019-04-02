@@ -45,7 +45,11 @@ public class PlaybackManager {
             }
             if (json.has("img")) {
                 String graphURL = json.getString("img");
-                responseHandler.onAddGraph(NetConfig.getNetUrl() + graphURL);
+                if (graphURL.length() == 0) {
+                    responseHandler.onAddGraph("");
+                } else {
+                    responseHandler.onAddGraph(NetConfig.getNetUrl() + graphURL);
+                }
             }
             Message message = messageToUIHandler.obtainMessage(0, responseHandler);
             messageToUIHandler.sendMessage(message);
