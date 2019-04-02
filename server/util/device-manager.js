@@ -2,9 +2,15 @@ const net = require('net');
 const woz_device = require('../devices/woz-device');
 
 var input_device_lists = {
+    "big-screen": {
+        id: "big-screen",
+        name: "触屏（大）",
+        triggers: {},
+        online: false
+    },
     "screen": {
         id: "screen",
-        name: "触屏",
+        name: "触屏（小）",
         triggers: {},
         online: false
     },
@@ -25,7 +31,14 @@ var input_device_lists = {
 var output_device_lists = {
     "screen": {
         id: "screen",
-        name: "屏幕反馈",
+        name: "屏幕反馈(小)",
+        continuing: true,
+        online: false,
+        socket: null
+    },
+    "big-screen": {
+        id: "big-screen",
+        name: "屏幕反馈(大)",
         continuing: true,
         online: false,
         socket: null

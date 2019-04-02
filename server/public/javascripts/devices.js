@@ -5,6 +5,7 @@ var data = {
 
 function set_trigger(idev, odev, trigger) {
     data.input_devices[idev].triggers[odev] = trigger;
+    submit();
 }
 
 function submit() {
