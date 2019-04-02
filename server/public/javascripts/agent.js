@@ -88,7 +88,8 @@ add_agent_msg = function(content) {
     data.reply.push({
         spans: spans,
         id: data.reply.length,
-        img: content.img
+        img: content.img,
+        extra: content.extra
     })
 }
 
@@ -116,6 +117,10 @@ submit_reply = function() {
 
         if (data.reply[i].img) {
             res.img = data.reply[i].img;
+        }
+
+        if (data.reply[i].extra) {
+            res.extra = data.reply[i].extra;
         }
     }
     res.text = text;
