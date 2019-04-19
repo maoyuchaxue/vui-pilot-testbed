@@ -48,13 +48,13 @@ clear_msg = function() {
 send_agent_msg = function(msg) {
     if (msg.text.length == 0) {
         data.msgs.push({text:"(语音停止)", is_user:false});    
+        msg.text = " ";
     } else {
         data.msgs.push({text:msg.text, is_user:false});
     }
     var ele = document.getElementById('msg-list');
     ele.scrollTop = ele.scrollHeight;
     socket.emit('agent_msg', msg);
-    data.reply = [];
 }
 
 submit_error = function() {
@@ -99,10 +99,6 @@ remove_slice = function(slice_id) {
 
 submit_reply = function() {
 
-    if (!data.test_started) {
-        return ;
-    }
-
     var res = {};
     var text = "";
     for (i in data.reply) {
@@ -125,6 +121,11 @@ submit_reply = function() {
     }
     res.text = text;
 
+    data.reply = [];
+    if (!data.test_started) {
+        console.log("not started, msg:" + res.text);
+        return ;
+    }
     send_agent_msg(res);
 }
 
@@ -160,6 +161,11 @@ receive_test_end = function() {
     data.test_started = false;
 }
 
+add_and_submit = function(msg) {
+    add_agent_msg(msg);
+    submit_reply();
+}
+
 agent = function() {
     var vm = new Vue({
         el: '#root',
@@ -173,6 +179,7 @@ agent = function() {
             filterSlot: filter_slot,
             chooseSection: choose_section,
             chooseScript: choose_script,
+            addAndSubmit: add_and_submit,
             triggerWakeup: function() {
                 // if (!data.test_started) {
                 //     return ;

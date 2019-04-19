@@ -69,8 +69,10 @@
             "text": "已为您将手机背景色改为粉红色"
         }
     ],
-    "vui_pilot_questions": [
-        {
+    "vui_pilot_questions": [{
+            "name": "唤醒",
+            "text": "在"
+        },{
             "name": "用免提给老妈打电话",
             "text": "已拨打"
         },{
