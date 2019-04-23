@@ -69,6 +69,8 @@ public class ASRService {
         try {
             is = new FileInputStream(fullFilename);
             properties.load(is);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (is != null) {
                 is.close();
