@@ -67,24 +67,32 @@ module.exports = {
         socket.emit('set-wakeup', wakeup);
     },
     send: function(text) {
-        module_socket.emit('user-msg', text);
+        if (module_socket) {
+            module_socket.emit('user-msg', text);
+        }
     },
     set_options: function(options) {
         module_socket.emit('options', options);
     },
     set_wakeup: function(new_wakeup) {
         wakeup = new_wakeup;
-        module_socket.emit('set-wakeup', wakeup);
+        if (module_socket) {
+            module_socket.emit('set-wakeup', wakeup);
+        }
     },
     is_wakeup: function() {
         return wakeup;
     },
     notify_start: function(cuid) {
         cur_cuid = cuid;
-        module_socket.emit('start', cuid);
+        if (module_socket) {
+            module_socket.emit('start', cuid);
+        }
     },
     notify_end: function() {
         cur_cuid = null;
-        module_socket.emit('end');
+        if (module_socket) {
+            module_socket.emit('end');
+        }
     }
 }

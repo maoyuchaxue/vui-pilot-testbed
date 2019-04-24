@@ -5,7 +5,7 @@ var router = express.Router();
 var message_queue = require('../util/message-queue');
 var socket_server = require('../util/socket-server');
 var device_manager = require('../util/device-manager');
-var asr_service = require('../util/asr-service');
+// var asr_service = require('../util/asr-service');
 var log = require('../util/logger');
 
 device_manager.init(socket_server);
@@ -15,12 +15,12 @@ router.get('/control', function(req, res, next) {
   if (req.query.start == 1) {
     message_queue.agent_to_user = [];
     socket_server.notify_start(req.query.cuid);
-    asr_service.start(req.query.cuid);
+    // asr_service.start(req.query.cuid);
 
     log('start', 'control', req.query.cuid);
   }
   if (req.query.end == 1) {
-    asr_service.stop();
+    // asr_service.stop();
     socket_server.notify_end();
     log('end', 'control', req.query.cuid);
   }
@@ -39,7 +39,7 @@ router.post('/raw', function(req, res, next) {
     }
   }
 
-  asr_service.sendBytes([...buff]);
+  // asr_service.sendBytes([...buff]);
   res.send("").status(200);
 })
 
