@@ -35,7 +35,7 @@
                         </button>
                     </div>
                     <div id="choose-list">
-                        <button v-for="option in options" :key="option.id" v-on:click.exact="addAgentMsg(option.content)" v-on:click.alt.exact="addAndSubmit(option.content)" class="option-button btn btn-primary">
+                        <button v-for="option in options" :key="option.id" v-on:click.exact="addAgentMsg(option.content)" v-on:click.alt.exact="addAndSubmit(option.content)" class="option-button btn" v-bind:class="option.content.extra ? option.content.extra.class : unwakeupButtonClass">
                             {{ option.content.name }}
                         </button>
                     </div>
